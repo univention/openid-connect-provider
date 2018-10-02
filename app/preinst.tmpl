@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -euo pipefail
+
+eval $(ucr shell)
+
+# get numberical user and group id of the kopano user
+if id kopano >/dev/null 2>&1; then
+	KOPANOUID=$(id -u kopano)
+	KOPANOGID=$(id -g kopano)
+else
+	KOPANOUID=$(id -u nobody)
+	KOPANOGID=$(id -g nobody)
+fi
+
+mkdir -p /etc/kopano/
+
+# create encryption key if not already present
+if [ ! -f /etc/kopano/konnectd-encryption.key ]; then
+	echo "creating new encryption key"
+	openssl rand -out /etc/kopano/konnectd-encryption.key 32
+fi
+
+# create token signing key if not already present
+if [ ! -f /etc/kopano/konnectd-tokens-signing-key.pem ]; then
+	echo "creating new token signing key"
+	openssl genpkey -algorithm RSA -out /etc/kopano/konnectd-tokens-signing-key.pem -pkeyopt rsa_keygen_bits:4096
+fi
+chown $KOPANOUID:$KOPANOGID /etc/kopano/konnectd-tokens-signing-key.pem
+
+# Add preliminary LDAP credentials if not existing
+# Using docker host credentials here
+# Credentials are replaced with the apps machine account in joinscript
+if [ ! -f /etc/kopano/konnectd.ldap_binddn -o ! -f /etc/kopano/konnectd.machine.secret ]; then
+	echo "Configuring LDAP credentials"
+	echo -n "$(ucr get ldap/hostdn)" > /etc/kopano/konnectd.ldap_binddn
+	cat /etc/machine.secret > /etc/kopano/konnectd.machine.secret
+	chown "$KOPANOUID":"$KOPANOGID" /etc/kopano/konnectd.ldap_binddn /etc/kopano/konnectd.machine.secret
+fi
+
+if [ ! -f /etc/kopano/identifier-registration.yaml ]; then
+	echo "creating template client registration"
+	touch /etc/kopano/identifier-registration.yaml
+	chmod 750 /etc/kopano/identifier-registration.yaml
+	chown root:$KOPANOGID /etc/kopano/identifier-registration.yaml
+	cat << EOF >"/etc/kopano/identifier-registration.yaml"
+%OIDC_PROVIDER_CONFIG_TEMPLATE%
+EOF
+fi
+
+echo "setting process of container to the id of the kopano or nobody user"
+ucr set appcenter/apps/oidc-provider/docker/params="--read-only --user=$KOPANOUID:$KOPANOGID"

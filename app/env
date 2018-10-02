@@ -1,0 +1,14 @@
+KOPANO_SERVER_DEFAULT_URI=file:///run/kopano/server.sock
+ARGS=--iss=https://@%@hostname@%@.@%@domainname@%@ --identifier-registration-conf /etc/kopano/identifier-registration.yaml ldap
+LDAP_URI=ldap://@%@ldap/server/name@%@:7389
+LDAP_BINDDN=@%@appcenter/apps/oidc-provider/hostdn@%@
+KONNECTD_LDAP_BIND_DN_FILE=konnectd.ldap_binddn
+KONNECTD_LDAP_BIND_PASSWORD_FILE=konnectd.machine.secret
+LDAP_BASEDN=@%@ldap/base@%@
+LDAP_SCOPE=sub
+LDAP_LOGIN_ATTRIBUTE=uid
+LDAP_EMAIL_ATTRIBUTE=mailPrimaryAddress
+LDAP_NAME_ATTRIBUTE=cn
+LDAP_UUID_ATTRIBUTE=uidNumber
+LDAP_UUID_ATTRIBUTE_TYPE=text
+LDAP_FILTER=(objectClass=organizationalPerson)

@@ -1,0 +1,55 @@
+#!/bin/bash
+
+eval "$(/usr/sbin/ucr shell)"
+
+set -x
+set -e
+
+. /usr/share/univention-lib/all.sh
+
+ucs_parseCredentials "$@"
+
+test -n "$binddn" || false
+test -n "$bindpwdfile" || false
+
+# get uid for binddn
+uid="$(univention-ldapsearch -b "$binddn" -LLL uid | sed -n 's/^uid: //p')"
+test_service="testservice"
+test_service_two="testservice2"
+
+trap "{ 
+	udm oidc/rpservice remove --dn "cn=$test_service,$ldap_base" || true
+	udm oidc/rpservice remove --dn "cn=$test_service_two,$ldap_base" || true
+	udm users/user remove --dn "uid=univention,cn=users,$ldap_base" || true
+}" EXIT
+
+# create entry
+udm oidc/rpservice create --set name="$test_service" --set clientid="testid" --set clientsecret="secret" --set applicationtype="web" --set redirectURI="https://univention.de"
+
+sleep 5
+# listener, the service name should be in this file
+grep "name: testservice" /etc/kopano/identifier-registration.yaml
+
+
+udm oidc/rpservice create --set name="$test_service_two" --set clientid="testid" --set clientsecret="secret" --set applicationtype="web" --set redirectURI="https://univention.de"
+sleep 5
+grep "name: testservice2" /etc/kopano/identifier-registration.yaml
+
+# modify
+udm oidc/rpservice modify --dn "cn=$test_service",dc=ucs,dc=local --set clientsecret="modifiedsecret"
+sleep 5
+grep "secret: modifiedsecret" /etc/kopano/identifier-registration.yaml
+
+udm users/user create --position cn=users,"$ldap_base" --set lastname=univention --set username=univention --set password=univention
+! univention-ldapsearch -xLLL -D uid=univention,cn=users,dc=ucs,dc=local -w univention cn="test_service" | grep modifiedsecret
+
+# delete
+udm oidc/rpservice remove --dn "cn=$test_service",dc=ucs,dc=local
+udm oidc/rpservice remove --dn "cn=$test_service_two",dc=ucs,dc=local
+sleep 5
+! grep "name: testservice2" /etc/kopano/identifier-registration.yaml
+! grep "name: testservice" /etc/kopano/identifier-registration.yaml
+
+echo "success"
+
+exit 0

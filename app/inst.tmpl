@@ -1,0 +1,83 @@
+#!/bin/bash
+
+VERSION=1
+SERVICE="Kopano-Konnect"
+
+. /usr/share/univention-join/joinscripthelper.lib
+. /usr/share/univention-appcenter/joinscripthelper.sh
+. /usr/share/univention-lib/ldap.sh
+. /usr/share/univention-lib/base.sh
+
+joinscript_init
+eval "$(ucr shell)"
+
+# get numerical user and group id of the kopano user
+if id kopano >/dev/null 2>&1; then
+	KOPANOUID=$(id -u kopano)
+	KOPANOGID=$(id -g kopano)
+else
+	KOPANOUID=$(id -u nobody)
+	KOPANOGID=$(id -g nobody)
+fi
+
+a2enmod rewrite proxy proxy_http || die
+
+CONFIG="$(joinscript_container_file /etc/univention/base.conf)"
+
+ucs_addServiceToLocalhost "${SERVICE}" "$@"
+
+univention-directory-manager container/cn create "$@" --ignore_exists \
+    --position="cn=univention,$ldap_base" \
+    --set name="oidc" \
+    --set description="OpenID Connect service definitions" || die
+
+
+cat << EOF >/etc/apache2/ucs-sites.conf.d/oidc-provider.conf
+%OIDC_PROVIDER_APACHE_CONF%
+EOF
+
+invoke-rc.d apache2 reload
+
+mkdir -p /usr/share/univention-oidc-provider || die
+
+# listener module
+cat << EOF >/usr/share/univention-oidc-provider/oidc-provider-listener.py
+%OIDC_PROVIDER_LISTENER%
+EOF
+
+cp /usr/share/univention-oidc-provider/oidc-provider-listener.py \
+	/usr/lib/univention-directory-listener/system/
+
+# configure udm module
+cat << EOF >/usr/share/univention-oidc-provider/oidc-provider-udm-module.py
+%OIDC_PROVIDER_UDM_MODULE%
+EOF
+
+# LDAP Schema
+cat << EOF >"/usr/share/univention-oidc-provider/oidc-provider.schema"
+%OIDC_PROVIDER_SCHEMA%
+EOF
+
+# LDAP ACL
+cat << EOF >"/usr/share/univention-oidc-provider/66oidc-provider.ldapacl"
+%OIDC_PROVIDER_ACL%
+EOF
+
+ucs_registerLDAPExtension "$@" \
+	--packagename oidc-provider \
+	--packageversion 0.1 \
+    --schema /usr/share/univention-oidc-provider/oidc-provider.schema \
+    --udm_module /usr/share/univention-oidc-provider/oidc-provider-udm-module.py \
+	--acl /usr/share/univention-oidc-provider/66oidc-provider.ldapacl || die
+
+
+# Update Container LDAP credentials
+echo -n "$(ucr get appcenter/apps/oidc-provider/hostdn)" > /etc/kopano/konnectd.ldap_binddn
+docker cp "$(ucr get appcenter/apps/oidc-provider/container)":/etc/machine.secret /etc/kopano/konnectd.machine.secret
+chown "$KOPANOUID":"$KOPANOGID" /etc/kopano/konnectd.ldap_binddn /etc/kopano/konnectd.machine.secret
+
+service univention-directory-listener restart || die
+service docker-app-oidc-provider restart || die
+
+joinscript_save_current_version
+exit 0

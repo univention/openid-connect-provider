@@ -1,0 +1,22 @@
+---
+# Konnect needs to be restarted for changes to take effect.
+# OpenID Connect client registry.
+clients:
+#  - id: playground.js
+#    name: OIDC Playground
+#    application_type: web
+#    redirect_uris:
+#       - https://my-host:8509/
+
+#  - id: playground-trusted.js
+#    name: Trusted OIDC Playground
+#    trusted: yes
+#    application_type: web
+#    redirect_uris:
+#       - https://my-host:8509/
+
+#  - id: native
+#    secret: secret
+#    application_type: native
+#    redirect_uris:
+#      - my://app

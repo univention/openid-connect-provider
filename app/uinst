@@ -1,0 +1,31 @@
+#!/bin/bash
+VERSION="1"
+
+. /usr/share/univention-lib/ldap.sh
+. /usr/share/univention-appcenter/joinscripthelper.sh
+
+joinscript_init
+
+eval "$(ucr shell)"
+SERVICE="Kopano-Konnect"
+APP="oidc-provider"
+
+ucs_removeServiceFromLocalhost "${SERVICE}" "$@"
+
+rm -f /etc/apache2/ucs-sites.conf.d/oidc-provider.conf
+invoke-rc.d apache2 reload
+
+# remove udm module
+ucs_unregisterLDAPExtension "$@" \
+	--schema oidc-provider \
+	--udm_module oidc/rpservice \
+	--acl 66oidc-provider.ldapacl || die
+
+# remove listener module
+rm -f /usr/lib/univention-directory-listener/system/oidc-provider-listener.py
+service univention-directory-listener restart
+
+rm -r /usr/share/univention-oidc-provider/
+
+joinscript_remove_script_from_status_file "$APP"
+exit 0
