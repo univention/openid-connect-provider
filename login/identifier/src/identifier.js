@@ -23,7 +23,9 @@ const LoadableApp = Loadable({
 
 const theme = createMuiTheme({
   palette: {
-    primary: green,
+    primary: {
+      main: '#7ab51d'
+    }
   }
 });
 

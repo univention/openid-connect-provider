@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import KopanoLogo from '../images/kopano-logo.svg';
+import UCSLogo from '../images/ucs-logo.svg';
 import { executeLogoff } from '../actions/common-actions';
 
 const styles = theme => ({
@@ -15,22 +15,33 @@ const styles = theme => ({
     display: 'flex',
     flex: 1
   },
-  logo: {
-    height: 18,
-    marginBottom: theme.spacing.unit * 2
-  },
   limiter: {
-    maxWidth: 450
+    marginTop: theme.spacing.unit * 17,
+    width: 313
   },
-  paper: theme.mixins.gutters({
+  paper: {
     backgroundColor: 'white',
-    paddingTop: 48,
-    paddingBottom: 36,
-    minHeight: 400,
-    position: 'relative'
-  }),
+    minHeight: 313,
+    maxHeight: 550,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    display: 'block',
+    paddingTop: theme.spacing.unit * 7,
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
   subHeader: {
     marginBottom: theme.spacing.unit * 5
+  },
+  wrapper: {
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2
   }
 });
 
@@ -38,11 +49,11 @@ class Welcomescreen extends React.PureComponent {
   render() {
     const { classes, hello } = this.props;
     return (
-      <Grid container justify="center" alignItems="center" spacing={0} className={classes.root}>
-        <Grid item xs={10} sm={5} md={4} className={classes.limiter}>
-          <Paper className={classes.paper} elevation={4}>
-            <img src={KopanoLogo} className={classes.logo} alt="Kopano"/>
-            <div>
+      <Grid container direction="column" justify="start" alignItems="center" spacing={0} className={classes.root}>
+        <Grid item className={classes.limiter}>
+          <Paper className={classes.paper} square elevation={2}>
+            <img src={UCSLogo} className={classes.logo} alt="UCS"/>
+            <div className={classes.wrapper}>
               <Typography variant="headline" component="h3">
                 Welcome {hello.displayName}
               </Typography>

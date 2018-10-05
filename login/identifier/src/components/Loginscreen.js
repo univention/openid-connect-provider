@@ -13,7 +13,6 @@ import Chooseaccount from './Chooseaccount';
 import Consent from './Consent';
 import Loading from './Loading';
 import RedirectWithQuery from './RedirectWithQuery';
-import KopanoLogo from '../images/kopano-logo.svg';
 import UCSLogo from '../images/ucs-logo.svg';
 import { executeHello } from '../actions/common-actions';
 
@@ -26,16 +25,8 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 10,
     marginBottom: theme.spacing.unit * 7
   },
-  logo: {
-    width: 120,
-    height: 120,
-    display: 'block',
-    paddingTop: theme.spacing.unit * 7,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
   limiter: {
-    width: 313,
+    width: 313
   },
   paper: {
     backgroundColor: 'white',
@@ -43,6 +34,14 @@ const styles = theme => ({
     maxHeight: 550,
     display: 'flex',
     flexDirection: 'column'
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    display: 'block',
+    paddingTop: theme.spacing.unit * 7,
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   loadingWrapper: {
     flexGrow: 1,
@@ -72,7 +71,6 @@ class Loginscreen extends React.PureComponent {
               </Switch>
             ))}
             {renderIf(hello === null)(() => (
-              // TODO remake loading style from UCS login?
               <div className={classes.loadingWrapper}>
                 <Loading/>
               </div>
