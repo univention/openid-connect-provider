@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import { Route, Switch } from 'react-router-dom';
 import renderIf from 'render-if';
 
@@ -13,6 +14,7 @@ import Consent from './Consent';
 import Loading from './Loading';
 import RedirectWithQuery from './RedirectWithQuery';
 import KopanoLogo from '../images/kopano-logo.svg';
+import UCSLogo from '../images/ucs-logo.svg';
 import { executeHello } from '../actions/common-actions';
 
 const styles = theme => ({
@@ -20,20 +22,32 @@ const styles = theme => ({
     display: 'flex',
     flex: 1
   },
+  header: {
+    marginTop: theme.spacing.unit * 10,
+    marginBottom: theme.spacing.unit * 7
+  },
   logo: {
-    height: 18,
-    marginBottom: theme.spacing.unit * 2
+    width: 120,
+    height: 120,
+    display: 'block',
+    paddingTop: theme.spacing.unit * 7,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   limiter: {
-    maxWidth: 450
+    width: 313,
   },
-  paper: theme.mixins.gutters({
+  paper: {
     backgroundColor: 'white',
-    paddingTop: 48,
-    paddingBottom: 36,
-    minHeight: 400,
+    minHeight: 313,
+    maxHeight: 550,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  loadingWrapper: {
+    flexGrow: 1,
     position: 'relative'
-  })
+  }
 });
 
 class Loginscreen extends React.PureComponent {
@@ -44,10 +58,11 @@ class Loginscreen extends React.PureComponent {
   render() {
     const { classes, hello } = this.props;
     return (
-      <Grid container justify="center" alignItems="center" spacing={0} className={classes.root}>
-        <Grid item xs={10} sm={5} md={4} className={classes.limiter}>
-          <Paper className={classes.paper} elevation={4}>
-            <img src={KopanoLogo} className={classes.logo} alt="Kopano"/>
+      <Grid container direction="column" justify="start" alignItems="center" spacing={0} className={classes.root}>
+        <Typography variant="headline" className={classes.header}>Login at Kopano</Typography>
+        <Grid item className={classes.limiter}>
+          <Paper className={classes.paper} square elevation={2}>
+            <img src={UCSLogo} className={classes.logo} alt="UCS"/>
             {renderIf(hello !== null)(() => (
               <Switch>
                 <Route path="/identifier" exact component={Login}></Route>
@@ -57,7 +72,10 @@ class Loginscreen extends React.PureComponent {
               </Switch>
             ))}
             {renderIf(hello === null)(() => (
-              <Loading/>
+              // TODO remake loading style from UCS login?
+              <div className={classes.loadingWrapper}>
+                <Loading/>
+              </div>
             ))}
           </Paper>
         </Grid>

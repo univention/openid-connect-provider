@@ -8,6 +8,7 @@ export function dirname(s) {
   return s.replace(/\\/g,'/').replace(/\/[^/]*$/, '');
 }
 
+// TODO could be removed now?
 export function propertyFromStylesheet(selector, attribute, asURL=false) {
   let value;
   let sheetHref;
@@ -46,6 +47,7 @@ export function propertyFromStylesheet(selector, attribute, asURL=false) {
   return value;
 }
 
+// TODO could be removed now?
 export function enhanceBodyBackground() {
   const bg = propertyFromStylesheet('#bg-enhanced.enhanced', 'background-image', true);
   const overlay = propertyFromStylesheet('#bg-enhanced.enhanced::after', 'background-image', true);

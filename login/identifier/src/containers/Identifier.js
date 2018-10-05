@@ -8,14 +8,12 @@ import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import renderIf from 'render-if';
 
-import { enhanceBodyBackground } from '../utils';
 import Loginscreen from '../components/Loginscreen';
 import Welcomescreen from '../components/Welcomescreen';
 import Goodbyescreen from '../components/Goodbyescreen';
 import PrivateRoute from '../components/PrivateRoute';
 
 // Trigger loading of background image.
-enhanceBodyBackground();
 
 const styles = () => ({
   root: {

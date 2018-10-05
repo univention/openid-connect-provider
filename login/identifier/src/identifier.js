@@ -4,8 +4,9 @@ import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
 
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import green from '@material-ui/core/colors/green';
 
-import { defaultTheme as theme } from 'kpop/es/theme';
 import IntlContainer from 'kpop/es/IntlContainer';
 import Loading from 'kpop/es/Loading';
 import { unregister } from 'kpop/es/serviceWorker';
@@ -18,6 +19,12 @@ const LoadableApp = Loadable({
   loader: () => import(/* webpackChunkName: "identifier-container" */ './containers/Identifier'),
   loading: Loading,
   timeout: 20000
+});
+
+const theme = createMuiTheme({
+  palette: {
+    primary: green,
+  }
 });
 
 ReactDOM.render(

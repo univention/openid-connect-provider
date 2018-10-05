@@ -12,8 +12,11 @@ import renderIf from 'render-if';
 import { updateInput, executeLogonIfFormValid, advanceLogonFlow } from '../actions/login-actions';
 
 const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
+  formWrapper: {
+	paddingLeft: theme.spacing.unit * 3,
+	paddingRight: theme.spacing.unit * 3,
+	paddingTop: theme.spacing.unit * 2,
+	paddingBottom: theme.spacing.unit * 2
   },
   buttonProgress: {
     color: green[500],
@@ -26,13 +29,10 @@ const styles = theme => ({
   buttonGroup: {
     textAlign: 'right'
   },
-  subHeader: {
-    marginBottom: theme.spacing.unit * 5
-  },
   wrapper: {
-    marginTop: theme.spacing.unit * 5,
-    position: 'relative',
-    display: 'inline-block'
+    marginTop: theme.spacing.unit * 3,
+	position: 'relative',
+	display: 'inline-block'
   },
   message: {
     marginTop: theme.spacing.unit * 2
@@ -64,14 +64,7 @@ class Login extends Component {
     };
 
     return (
-      <div>
-        <Typography variant="headline" component="h3">
-          Sign in
-        </Typography>
-        <Typography variant="subheading" className={classes.subHeader}>
-          with your Kopano account
-        </Typography>
-
+      <div className={classes.formWrapper}>
         <form action="" onSubmit={(event) => this.logon(event)}>
           <div>
             <TextField
