@@ -9,38 +9,57 @@ import Typography from '@material-ui/core/Typography';
 import renderIf from 'render-if';
 
 import Loading from './Loading';
-import KopanoLogo from '../images/kopano-logo.svg';
+import UCSLogo from '../images/ucs-logo.svg';
 import { executeHello, executeLogoff } from '../actions/common-actions';
 
 const styles = theme => ({
   root: {
     display: 'flex',
-    flex: 1
+    flex: 1,
+    flexWrap: 'nowrap'
   },
-  logo: {
-    height: 18,
-    marginBottom: theme.spacing.unit * 2
+  header: {
+    marginTop: theme.spacing.unit * 10,
+    marginBottom: theme.spacing.unit * 7
   },
   limiter: {
-    maxWidth: 450
+    width: 313,
+    paddingBottom: theme.spacing.unit * 2
   },
-  paper: theme.mixins.gutters({
+  [`@media (max-width: ${313 + (theme.spacing.unit * 4)}px)`]: {
+    limiter: {
+      width: '100%',
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2
+    }
+  },
+  paper: {
     backgroundColor: 'white',
-    paddingTop: 48,
-    paddingBottom: 36,
-    minHeight: 400,
-    position: 'relative'
-  }),
-  buttonGroup: {
-    textAlign: 'right'
+    minHeight: 313,
+    maxHeight: 550,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    display: 'block',
+    paddingTop: theme.spacing.unit * 7,
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   subHeader: {
     marginBottom: theme.spacing.unit * 5
   },
   wrapper: {
-    marginTop: theme.spacing.unit * 5,
-    position: 'relative',
-    display: 'inline-block'
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2
+  },
+  loadingWrapper: {
+    flexGrow: 1,
+    position: 'relative'
   }
 });
 
@@ -52,12 +71,13 @@ class Goodbyescreen extends React.PureComponent {
   render() {
     const { classes, hello } = this.props;
     return (
-      <Grid container justify="center" alignItems="center" spacing={0} className={classes.root}>
-        <Grid item xs={10} sm={5} md={4} className={classes.limiter}>
+      <Grid container direction="column" justify="start" alignItems="center" spacing={0} className={classes.root}>
+        <Typography variant="headline" className={classes.header}>&nbsp;</Typography>
+        <Grid item className={classes.limiter}>
           <Paper className={classes.paper} elevation={4}>
-            <img src={KopanoLogo} className={classes.logo} alt="Kopano"/>
+            <img src={UCSLogo} className={classes.logo} alt="UCS"/>
             {renderIf(hello !== null && !hello.state)(() => (
-              <div>
+              <div className={classes.wrapper}>
                 <Typography variant="headline" component="h3">
                   Goodbye
                 </Typography>
@@ -95,7 +115,9 @@ class Goodbyescreen extends React.PureComponent {
               </div>
             ))}
             {renderIf(hello === null)(() => (
-              <Loading/>
+              <div className={classes.loadingWrapper}>
+                <Loading/>
+              </div>
             ))}
           </Paper>
         </Grid>
