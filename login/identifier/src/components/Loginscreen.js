@@ -19,14 +19,23 @@ import { executeHello } from '../actions/common-actions';
 const styles = theme => ({
   root: {
     display: 'flex',
-    flex: 1
+    flex: 1,
+    flexWrap: 'nowrap'
   },
   header: {
     marginTop: theme.spacing.unit * 10,
     marginBottom: theme.spacing.unit * 7
   },
   limiter: {
-    width: 313
+    width: 313,
+    paddingBottom: theme.spacing.unit * 2
+  },
+  [`@media (max-width: ${313 + (theme.spacing.unit * 4)}px)`]: {
+    limiter: {
+      width: '100%',
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2
+    }
   },
   paper: {
     backgroundColor: 'white',
