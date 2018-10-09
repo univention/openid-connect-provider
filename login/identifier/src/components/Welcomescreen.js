@@ -46,17 +46,22 @@ const styles = theme => ({
     marginLeft: 'auto',
     marginRight: 'auto'
   },
-  subHeader: {
-    marginBottom: theme.spacing.unit * 5
-  },
-  wrapper: {
+  contentWrapper: {
     paddingLeft: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 3,
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2
   },
-  button: {
-    marginTop: theme.spacing.unit * 1
+  subHeader: {
+    marginBottom: theme.spacing.unit * 5
+  },
+  buttonGroup: {
+    textAlign: 'right'
+  },
+  buttonWrapper: {
+    marginTop: theme.spacing.unit * 3,
+    position: 'relative',
+    display: 'inline-block'
   }
 });
 
@@ -69,7 +74,7 @@ class Welcomescreen extends React.PureComponent {
         <Grid item className={classes.limiter}>
           <Paper className={classes.paper} square elevation={2}>
             <img src={UCSLogo} className={classes.logo} alt="UCS"/>
-            <div className={classes.wrapper}>
+            <div className={classes.contentWrapper}>
               <Typography variant="headline" component="h3">
                 Welcome {hello.displayName}
               </Typography>
@@ -77,15 +82,18 @@ class Welcomescreen extends React.PureComponent {
                 {hello.username}
               </Typography>
 
-              <Typography gutterBottom>
+              <Typography>
                 You are signed in - awesome!
               </Typography>
 
-              <Button
-                variant="raised"
-                className={classes.button}
-                onClick={(event) => this.logoff(event)}
-              >Sign out</Button>
+              <div className={classes.buttonGroup}>
+                <div className={classes.buttonWrapper}>
+                  <Button
+                    color="primary"
+                    onClick={(event) => this.logoff(event)}
+                  >Sign out</Button>
+                </div>
+              </div>
             </div>
           </Paper>
         </Grid>

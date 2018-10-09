@@ -48,18 +48,26 @@ const styles = theme => ({
     marginLeft: 'auto',
     marginRight: 'auto'
   },
-  subHeader: {
-    marginBottom: theme.spacing.unit * 5
-  },
-  wrapper: {
+  contentWrapper: {
     paddingLeft: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 3,
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2
   },
+  subHeader: {
+    marginBottom: theme.spacing.unit * 5
+  },
   loadingWrapper: {
     flexGrow: 1,
     position: 'relative'
+  },
+  buttonGroup: {
+    textAlign: 'right'
+  },
+  buttonWrapper: {
+    marginTop: theme.spacing.unit * 3,
+    position: 'relative',
+    display: 'inline-block'
   }
 });
 
@@ -77,7 +85,7 @@ class Goodbyescreen extends React.PureComponent {
           <Paper className={classes.paper} elevation={4}>
             <img src={UCSLogo} className={classes.logo} alt="UCS"/>
             {renderIf(hello !== null && !hello.state)(() => (
-              <div className={classes.wrapper}>
+              <div className={classes.contentWrapper}>
                 <Typography variant="headline" component="h3">
                   Goodbye
                 </Typography>
@@ -85,13 +93,13 @@ class Goodbyescreen extends React.PureComponent {
                   you have been signed out from your Kopano account
                 </Typography>
 
-                <Typography gutterBottom>
+                <Typography>
                   You can close this window now.
                 </Typography>
               </div>
             ))}
             {renderIf(hello !== null && hello.state === true)(() => (
-              <div>
+              <div className={classes.contentWrapper}>
                 <Typography variant="headline" component="h3">
                   Hello {hello.displayName}
                 </Typography>
@@ -99,15 +107,14 @@ class Goodbyescreen extends React.PureComponent {
                   please confirm sign out
                 </Typography>
 
-                <Typography gutterBottom>
+                <Typography>
                   Press the button below, to sign out from your Kopano account now.
                 </Typography>
 
                 <div className={classes.buttonGroup}>
-                  <div className={classes.wrapper}>
+                  <div className={classes.buttonWrapper}>
                     <Button
-                      color="secondary"
-                      className={classes.button}
+                      color="primary"
                       onClick={(event) => this.logoff(event)}
                     >Sign out</Button>
                   </div>

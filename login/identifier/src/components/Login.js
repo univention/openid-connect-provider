@@ -29,7 +29,7 @@ const styles = theme => ({
   buttonGroup: {
     textAlign: 'right'
   },
-  wrapper: {
+  buttonWrapper: {
     marginTop: theme.spacing.unit * 3,
 	position: 'relative',
 	display: 'inline-block'
@@ -90,7 +90,7 @@ class Login extends Component {
               autoComplete="kopano-account current-password"
             />
             <div className={classes.buttonGroup}>
-              <div className={classes.wrapper}>
+              <div className={classes.buttonWrapper}>
                 <Button
                   type="submit"
                   color="primary"
