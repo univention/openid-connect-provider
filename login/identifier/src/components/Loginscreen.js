@@ -67,7 +67,7 @@ class Loginscreen extends React.PureComponent {
     const { classes, hello } = this.props;
     return (
       <Grid container direction="column" justify="start" alignItems="center" spacing={0} className={classes.root}>
-        <Typography variant="headline" className={classes.header}>Login at Kopano</Typography>
+        <Typography variant="headline" className={classes.header}>Login</Typography>
         <Grid item className={classes.limiter}>
           <Paper className={classes.paper} square elevation={2}>
             <img src={UCSLogo} className={classes.logo} alt="UCS"/>
