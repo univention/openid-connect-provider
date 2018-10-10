@@ -32,7 +32,7 @@ apt update
 apt -y install nodejs
 ```
 
-### imagemagick (v=?)
+### ~~imagemagick (v=?)~~ not needed anymore
 ```
 apt -y install imagemagick
 ```
@@ -43,7 +43,7 @@ apt -y install imagemagick
 apt -y install python-scour
 ```
 
-### inkscape (v=?)
+### ~~inkscape (v=?)~~ not needed anymore
 ```
 apt -y install inkscape
 ```
