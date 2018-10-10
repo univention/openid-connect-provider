@@ -16,29 +16,29 @@ const styles = theme => ({
   root: {
     display: 'flex',
     flex: 1,
-    flexWrap: 'nowrap'
+    flexWrap: 'nowrap',
   },
   header: {
     marginTop: theme.spacing.unit * 10,
-    marginBottom: theme.spacing.unit * 7
+    marginBottom: theme.spacing.unit * 7,
   },
   limiter: {
     width: 313,
-    paddingBottom: theme.spacing.unit * 2
+    paddingBottom: theme.spacing.unit * 2,
   },
   [`@media (max-width: ${313 + (theme.spacing.unit * 4)}px)`]: {
     limiter: {
       width: '100%',
       paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2
-    }
+      paddingRight: theme.spacing.unit * 2,
+    },
   },
   paper: {
     backgroundColor: 'white',
     minHeight: 313,
     maxHeight: 550,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   logo: {
     width: 120,
@@ -46,29 +46,37 @@ const styles = theme => ({
     display: 'block',
     paddingTop: theme.spacing.unit * 7,
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
   },
   contentWrapper: {
     paddingLeft: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 3,
     paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2
+    paddingBottom: theme.spacing.unit * 2,
   },
   subHeader: {
-    marginBottom: theme.spacing.unit * 5
+    marginBottom: theme.spacing.unit * 5,
   },
   loadingWrapper: {
     flexGrow: 1,
-    position: 'relative'
+    position: 'relative',
   },
   buttonGroup: {
-    textAlign: 'right'
+    marginTop: theme.spacing.unit * 3,
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   buttonWrapper: {
-    marginTop: theme.spacing.unit * 3,
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    '&:first-child': {
+      marginLeft: 0,
+    },
+    '&:last-child': {
+      marginRight: 0,
+    },
     position: 'relative',
-    display: 'inline-block'
-  }
+  },
 });
 
 class Goodbyescreen extends React.PureComponent {

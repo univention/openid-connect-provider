@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import green from '@material-ui/core/colors/green';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import renderIf from 'render-if';
@@ -12,31 +11,38 @@ import renderIf from 'render-if';
 import { updateInput, executeLogonIfFormValid, advanceLogonFlow } from '../actions/login-actions';
 
 const styles = theme => ({
-  formWrapper: {
-	paddingLeft: theme.spacing.unit * 3,
-	paddingRight: theme.spacing.unit * 3,
-	paddingTop: theme.spacing.unit * 2,
-	paddingBottom: theme.spacing.unit * 2
+  contentWrapper: {
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
+  buttonGroup: {
+    marginTop: theme.spacing.unit * 3,
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  buttonWrapper: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    '&:first-child': {
+      marginLeft: 0,
+    },
+    '&:last-child': {
+      marginRight: 0,
+    },
+    position: 'relative',
   },
   buttonProgress: {
-    color: green[500],
     position: 'absolute',
     top: '50%',
     left: '50%',
     marginTop: -12,
-    marginLeft: -12
-  },
-  buttonGroup: {
-    textAlign: 'right'
-  },
-  buttonWrapper: {
-    marginTop: theme.spacing.unit * 3,
-	position: 'relative',
-	display: 'inline-block'
+    marginLeft: -12,
   },
   message: {
-    marginTop: theme.spacing.unit * 2
-  }
+    marginTop: theme.spacing.unit * 2,
+  },
 });
 
 class Login extends Component {
@@ -64,7 +70,7 @@ class Login extends Component {
     };
 
     return (
-      <div className={classes.formWrapper}>
+      <div className={classes.contentWrapper}>
         <form action="" onSubmit={(event) => this.logon(event)}>
           <div>
             <TextField
@@ -94,7 +100,6 @@ class Login extends Component {
                 <Button
                   type="submit"
                   color="primary"
-                  className={classes.button}
                   disabled={!!loading}
                   onClick={(event) => this.logon(event)}
                 >Next</Button>

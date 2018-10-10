@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import green from '@material-ui/core/colors/green';
 import Typography from '@material-ui/core/Typography';
 import renderIf from 'render-if';
 
@@ -15,34 +14,44 @@ import ClientDisplayName from './ClientDisplayName';
 import ScopeList from './ScopeList';
 
 const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
+  contentWrapper: {
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
+  subHeader: {
+    marginBottom: theme.spacing.unit * 2,
+  },
+  scopeList: {
+    marginBottom: theme.spacing.unit * 2,
+  },
+  buttonGroup: {
+    marginTop: theme.spacing.unit * 3,
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  buttonWrapper: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    '&:first-child': {
+      marginLeft: 0,
+    },
+    '&:last-child': {
+      marginRight: 0,
+    },
+    position: 'relative',
   },
   buttonProgress: {
-    color: green[500],
     position: 'absolute',
     top: '50%',
     left: '50%',
     marginTop: -12,
-    marginLeft: -12
-  },
-  buttonGroup: {
-    textAlign: 'right'
-  },
-  subHeader: {
-    marginBottom: theme.spacing.unit * 2
-  },
-  scopeList: {
-    marginBottom: theme.spacing.unit * 2
-  },
-  wrapper: {
-    marginTop: theme.spacing.unit * 5,
-    position: 'relative',
-    display: 'inline-block'
+    marginLeft: -12,
   },
   message: {
-    marginTop: theme.spacing.unit * 2
-  }
+    marginTop: theme.spacing.unit * 2,
+  },
 });
 
 class Consent extends Component {
@@ -60,7 +69,7 @@ class Consent extends Component {
 
     const scopes = hello.details.scopes || {};
     return (
-      <div>
+      <div className={classes.contentWrapper}>
         <Typography variant="headline" component="h3">
           Hi {hello.displayName}
         </Typography>
@@ -77,21 +86,19 @@ class Consent extends Component {
 
         <form action="" onSubmit={(event) => this.logon(event)}>
           <div className={classes.buttonGroup}>
-            <div className={classes.wrapper}>
+            <div className={classes.buttonWrapper}>
               <Button
                 color="secondary"
-                className={classes.button}
                 disabled={!!loading}
                 onClick={(event) => this.action(event, false)}
               >Cancel
               </Button>
               {(loading && loading !== REQUEST_CONSENT_ALLOW) && <CircularProgress size={24} className={classes.buttonProgress} />}
             </div>
-            <div className={classes.wrapper}>
+            <div className={classes.buttonWrapper}>
               <Button
                 type="submit"
                 color="primary"
-                className={classes.button}
                 disabled={!!loading}
                 onClick={(event) => this.action(event, true)}
               >Allow</Button>

@@ -11,20 +11,26 @@ import Typography from '@material-ui/core/Typography';
 import { executeLogonIfFormValid, advanceLogonFlow } from '../actions/login-actions';
 
 const styles = theme => ({
+  contentWrapper: {
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
   subHeader: {
-    marginBottom: theme.spacing.unit * 5
+    marginBottom: theme.spacing.unit * 5,
   },
   message: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing.unit * 2,
   },
   accountList: {
     marginLeft: theme.spacing.unit * -3,
-    marginRight: theme.spacing.unit * -3
+    marginRight: theme.spacing.unit * -3,
   },
   accountListItem: {
     paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3
-  }
+    paddingRight: theme.spacing.unit * 3,
+  },
 });
 
 class Chooseaccount extends Component {
@@ -49,7 +55,7 @@ class Chooseaccount extends Component {
     }
 
     return (
-      <div>
+      <div className={classes.contentWrapper}>
         <Typography variant="headline" component="h3">
           Choose an account
         </Typography>

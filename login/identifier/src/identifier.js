@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
-import green from '@material-ui/core/colors/green';
 
 import IntlContainer from 'kpop/es/IntlContainer';
 import Loading from 'kpop/es/Loading';
