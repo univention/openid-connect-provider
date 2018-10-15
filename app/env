@@ -1,5 +1,5 @@
 KOPANO_SERVER_DEFAULT_URI=file:///run/kopano/server.sock
-ARGS=--iss=https://@%@hostname@%@.@%@domainname@%@ --identifier-registration-conf /etc/kopano/identifier-registration.yaml ldap
+ARGS=--iss=https://@%@hostname@%@.@%@domainname@%@ --identifier-registration-conf /etc/kopano/identifier-registration.yaml --identifier-client-path ./identifier-univention ldap
 LDAP_URI=ldap://@%@ldap/server/name@%@:7389
 LDAP_BINDDN=@%@appcenter/apps/oidc-provider/hostdn@%@
 KONNECTD_LDAP_BIND_DN_FILE=konnectd.ldap_binddn
