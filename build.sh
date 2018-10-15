@@ -26,4 +26,5 @@ docker build \
 	-t oidc-provider:$DOCKER_IMG_VERSION \
 	./
 
-docker push docker-test.software-univention.de oidc-provider:$DOCKER_IMG_VERSION
+docker tag oidc-provider:$DOCKER_IMG_VERSION docker-test.software-univention.de/oidc-provider:$DOCKER_IMG_VERSION
+docker push docker-test.software-univention.de/oidc-provider:$DOCKER_IMG_VERSION
