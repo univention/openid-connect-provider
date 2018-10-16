@@ -1,8 +1,10 @@
 #!/bin/bash
 
-set -xeuo pipefail
+set -euo pipefail
 
 eval $(ucr shell)
+
+set -x
 
 # get numberical user and group id of the kopano user
 if id kopano >/dev/null 2>&1; then
@@ -14,6 +16,8 @@ else
 fi
 
 mkdir -p /etc/kopano/
+# make sure a valid directory for temporary files for openssl is provided
+export RANDFILE=/etc/kopano/.rnd
 
 # create encryption key if not already present
 if [ ! -f /etc/kopano/konnectd-encryption.key ]; then
