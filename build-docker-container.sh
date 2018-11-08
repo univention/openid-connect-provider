@@ -2,7 +2,6 @@
 
 set -xe
 
-APP_VERSION=${APP_VERSION:-}
 DOCKER_IMG_VERSION=${DOCKER_IMG_VERSION:-latest}
 
 # build identifier app

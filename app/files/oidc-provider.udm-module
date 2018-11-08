@@ -76,6 +76,17 @@ property_descriptions = {
 		may_change=True,
 		identifies=False,
 	),
+	'trusted': univention.admin.property(
+		short_description=_(u'Trusted'),
+		long_description=_(u'Corresponds to "trusted" option in configfile. If activated, user will not be asked for consent to transfer identity attributes'),
+		syntax=univention.admin.syntax.booleanNone,
+		multivalue=False,
+		options=[],
+		required=True,
+		may_change=True,
+		identifies=False,
+		default="true",
+	),
 	'applicationtype': univention.admin.property(
 		short_description=_(u'Service type (web or native)'),
 		long_description=_(u'Corresponds to "application_type" option in configfile'),
@@ -105,6 +116,7 @@ layout = [
 			["name", ],
 			["clientid", ],
 			["clientsecret", ],
+			["trusted", ],
 			["applicationtype", ],
 			["redirectURI", ],
 		]),
@@ -116,8 +128,9 @@ mapping = univention.admin.mapping.mapping()
 mapping.register('name', 'cn', None, univention.admin.mapping.ListToString)
 mapping.register('clientid', 'clientid', None, univention.admin.mapping.ListToString)
 mapping.register('clientsecret', 'clientsecret', None, univention.admin.mapping.ListToString)
+mapping.register('trusted', 'trusted', None, univention.admin.mapping.ListToString)
 mapping.register('applicationtype', 'applicationType', None, univention.admin.mapping.ListToString)
-mapping.register('redirectURI', 'redirectURI', univention.admin.mapping.ListToString, univention.admin.mapping.ListToString)
+mapping.register('redirectURI', 'redirectURI')
 
 
 class object(univention.admin.handlers.simpleLdap):

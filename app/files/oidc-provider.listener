@@ -58,6 +58,9 @@ def handler(dn, new, old):
 				client['id'] = new['clientid'][0]
 				client['secret'] = new['clientsecret'][0]
 				client['application_type'] = new['applicationType'][0]
+				# udm syntax returns string, so convert new['trusted'][0] to bool.
+				# otherwise, the result in the yaml will be a quoted string
+				client['trusted'] = new['trusted'][0] in ['yes']  
 				client['redirect_uris'] = new['redirectURI']
 				if old and 'clients' in filecontent:
 					for c in filecontent['clients']:
