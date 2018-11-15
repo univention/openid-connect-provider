@@ -3,7 +3,7 @@
 set -e
 set -x
 
-APP_VERSION="4.3/oidc-provider"
+APP_VERSION="4.3/openid-connect-provider"
 
 selfservice () {
 	local uri="https://provider-portal.software-univention.de/appcenter-selfservice/univention-appcenter-control"
@@ -32,11 +32,11 @@ sed -i -e "/%OIDC_PROVIDER_CONFIG_TEMPLATE%/r app/files/identifier-registration.
 
 # joinscript
 cp app/inst.tmpl inst
-sed -i -e "/%OIDC_PROVIDER_LISTENER%/r app/files/oidc-provider.listener" -e "/%OIDC_PROVIDER_LISTENER%/d" inst
-sed -i -e "/%OIDC_PROVIDER_APACHE_CONF%/r app/files/oidc-provider.conf" -e "/%OIDC_PROVIDER_APACHE_CONF%/d" inst
-sed -i -e "/%OIDC_PROVIDER_SCHEMA%/r app/files/oidc-provider.schema" -e "/%OIDC_PROVIDER_SCHEMA%/d" inst
-sed -i -e "/%OIDC_PROVIDER_UDM_MODULE%/r app/files/oidc-provider.udm-module" -e "/%OIDC_PROVIDER_UDM_MODULE%/d" inst
-sed -i -e "/%OIDC_PROVIDER_ACL%/r app/files/oidc-provider.ldapacl" -e "/%OIDC_PROVIDER_ACL%/d" inst
+sed -i -e "/%OIDC_PROVIDER_LISTENER%/r app/files/openid-connect-provider.listener" -e "/%OIDC_PROVIDER_LISTENER%/d" inst
+sed -i -e "/%OIDC_PROVIDER_APACHE_CONF%/r app/files/openid-connect-provider.conf" -e "/%OIDC_PROVIDER_APACHE_CONF%/d" inst
+sed -i -e "/%OIDC_PROVIDER_SCHEMA%/r app/files/openid-connect-provider.schema" -e "/%OIDC_PROVIDER_SCHEMA%/d" inst
+sed -i -e "/%OIDC_PROVIDER_UDM_MODULE%/r app/files/openid-connect-provider.udm-module" -e "/%OIDC_PROVIDER_UDM_MODULE%/d" inst
+sed -i -e "/%OIDC_PROVIDER_ACL%/r app/files/openid-connect-provider.ldapacl" -e "/%OIDC_PROVIDER_ACL%/d" inst
 
 # config
 cp app/configure_host.tmpl configure_host

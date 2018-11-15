@@ -8,24 +8,24 @@ joinscript_init
 
 eval "$(ucr shell)"
 SERVICE="Kopano-Konnect"
-APP="oidc-provider"
+APP="openid-connect-provider"
 
 ucs_removeServiceFromLocalhost "${SERVICE}" "$@"
 
-rm -f /etc/apache2/ucs-sites.conf.d/oidc-provider.conf
+rm -f /etc/apache2/ucs-sites.conf.d/openid-connect-provider.conf
 invoke-rc.d apache2 reload
 
 # remove udm module
 ucs_unregisterLDAPExtension "$@" \
-	--schema oidc-provider \
+	--schema openid-connect-provider \
 	--udm_module oidc/rpservice \
-	--acl 66oidc-provider.ldapacl || die
+	--acl 66openid-connect-provider.ldapacl || die
 
 # remove listener module
-rm -f /usr/lib/univention-directory-listener/system/oidc-provider-listener.py
+rm -f /usr/lib/univention-directory-listener/system/openid-connect-provider-listener.py
 service univention-directory-listener restart
 
-rm -r /usr/share/univention-oidc-provider/
+rm -r /usr/share/univention-openid-connect-provider/
 
 joinscript_remove_script_from_status_file "$APP"
 exit 0

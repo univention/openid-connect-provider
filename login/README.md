@@ -1,5 +1,5 @@
 # DEPENDENCIES
-Dependencies for oidc-provider/identifier make
+Dependencies for openid-connect-provider/identifier make
 
 Necessary for installation (tested on UCS 4.3-1)
 
@@ -55,7 +55,7 @@ apt -y install inkscape
 ```
 ## VM
 # install DEPENDENCIES
-# install oidc-provider app (read comment in ~/git/oidc-provider/testing/runkonnectd.sh)
+# install openid-connect-provider app (read comment in ~/git/openid-connect-provider/testing/runkonnectd.sh)
 ```
 
 ## testing loop
@@ -73,7 +73,7 @@ cd /root/identifier; make; rm -rf /var/konnect-login/*; cp -r ~/identifier/build
 scp ./testing/runkonnectd.sh 10.200.xx.xx:/root/
 
 ## vm
-service docker-app-oidc-provider stop # (read comment in ~/git/oidc-provider/testing/runkonnectd.sh)
+service docker-app-openid-connect-provider stop # (read comment in ~/git/openid-connect-provider/testing/runkonnectd.sh)
 cd /root; bash runkonnectd.sh
 ```
 

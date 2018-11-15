@@ -36,7 +36,7 @@ import listener
 import subprocess
 import univention.debug as ud
 
-name = 'oidc-provider'
+name = 'openid-connect-provider'
 description = 'Update oidc provider service configuration'
 filter = '(objectClass=univentionOIDCService)'
 target_file = '/etc/kopano/identifier-registration.yaml'
@@ -80,7 +80,7 @@ def handler(dn, new, old):
 				config.write("# Konnect needs to be restarted for changes to take effect.\n\n")
 				yaml.dump(filecontent, config, default_flow_style=False)
 
-		subprocess.call(['service', 'docker-app-oidc-provider', 'restart'])
+		subprocess.call(['service', 'docker-app-openid-connect-provider', 'restart'])
 	except IOError as e:
 		ud.debug(ud.LISTENER, ud.ERROR, 'IOError accessing config: %s' % e)
 

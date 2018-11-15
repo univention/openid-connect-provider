@@ -32,52 +32,52 @@ univention-directory-manager container/cn create "$@" --ignore_exists \
     --set description="OpenID Connect service definitions" || die
 
 
-cat << EOF >/etc/apache2/ucs-sites.conf.d/oidc-provider.conf
+cat << EOF >/etc/apache2/ucs-sites.conf.d/openid-connect-provider.conf
 %OIDC_PROVIDER_APACHE_CONF%
 EOF
 
 invoke-rc.d apache2 reload
 
-mkdir -p /usr/share/univention-oidc-provider || die
+mkdir -p /usr/share/univention-openid-connect-provider || die
 
 # listener module
-cat << EOF >/usr/share/univention-oidc-provider/oidc-provider-listener.py
+cat << EOF >/usr/share/univention-openid-connect-provider/openid-connect-provider-listener.py
 %OIDC_PROVIDER_LISTENER%
 EOF
 
-cp /usr/share/univention-oidc-provider/oidc-provider-listener.py \
+cp /usr/share/univention-openid-connect-provider/openid-connect-provider-listener.py \
 	/usr/lib/univention-directory-listener/system/
 
 # configure udm module
-cat << EOF >/usr/share/univention-oidc-provider/oidc-provider-udm-module.py
+cat << EOF >/usr/share/univention-openid-connect-provider/openid-connect-provider-udm-module.py
 %OIDC_PROVIDER_UDM_MODULE%
 EOF
 
 # LDAP Schema
-cat << EOF >"/usr/share/univention-oidc-provider/oidc-provider.schema"
+cat << EOF >"/usr/share/univention-openid-connect-provider/openid-connect-provider.schema"
 %OIDC_PROVIDER_SCHEMA%
 EOF
 
 # LDAP ACL
-cat << EOF >"/usr/share/univention-oidc-provider/66oidc-provider.ldapacl"
+cat << EOF >"/usr/share/univention-openid-connect-provider/66openid-connect-provider.ldapacl"
 %OIDC_PROVIDER_ACL%
 EOF
 
 ucs_registerLDAPExtension "$@" \
-	--packagename oidc-provider \
+	--packagename openid-connect-provider \
 	--packageversion 0.1 \
-    --schema /usr/share/univention-oidc-provider/oidc-provider.schema \
-    --udm_module /usr/share/univention-oidc-provider/oidc-provider-udm-module.py \
-	--acl /usr/share/univention-oidc-provider/66oidc-provider.ldapacl || die
+    --schema /usr/share/univention-openid-connect-provider/openid-connect-provider.schema \
+    --udm_module /usr/share/univention-openid-connect-provider/openid-connect-provider-udm-module.py \
+	--acl /usr/share/univention-openid-connect-provider/66openid-connect-provider.ldapacl || die
 
 
 # Update Container LDAP credentials
-echo -n "$(ucr get appcenter/apps/oidc-provider/hostdn)" > /etc/kopano/konnectd.ldap_binddn
-docker cp "$(ucr get appcenter/apps/oidc-provider/container)":/etc/machine.secret /etc/kopano/konnectd.machine.secret
+echo -n "$(ucr get appcenter/apps/openid-connect-provider/hostdn)" > /etc/kopano/konnectd.ldap_binddn
+docker cp "$(ucr get appcenter/apps/openid-connect-provider/container)":/etc/machine.secret /etc/kopano/konnectd.machine.secret
 chown "$KOPANOUID":"$KOPANOGID" /etc/kopano/konnectd.ldap_binddn /etc/kopano/konnectd.machine.secret
 
 service univention-directory-listener restart || die
-service docker-app-oidc-provider restart || die
+service docker-app-openid-connect-provider restart || die
 
 joinscript_save_current_version
 exit 0

@@ -2,13 +2,13 @@
 
 set -x
 
-# Make sure oidc-provider app is installed
+# Make sure openid-connect-provider app is installed
 ## univention-install -y univention-appcenter-dev; univention-app dev-use-test-appcenter; univention-app update
-## univention-app install oidc-provider
+## univention-app install openid-connect-provider
 # ALSO make sure the app is stopped so we can test:
-## service docker-app-oidc-provider stop
+## service docker-app-openid-connect-provider stop
 
-docker run --env-file /var/lib/univention-appcenter/apps/oidc-provider/oidc-provider.env \
+docker run --env-file /var/lib/univention-appcenter/apps/openid-connect-provider/openid-connect-provider.env \
 	--rm \
 	--volume /etc/kopano/konnectd-tokens-signing-key.pem:/run/secrets/konnectd_signing_private_key:ro \
 	--volume /etc/kopano/konnectd-encryption.key:/run/secrets/konnectd_encryption_secret:ro \

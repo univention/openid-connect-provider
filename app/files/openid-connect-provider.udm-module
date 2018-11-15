@@ -32,7 +32,7 @@ import univention.admin.filter
 import univention.admin.handlers
 import univention.admin.syntax
 
-translation = univention.admin.localization.translation('univention.admin.handlers.oidc-provider')
+translation = univention.admin.localization.translation('univention.admin.handlers.openid-connect-provider')
 _ = translation.translate
 
 module = 'oidc/rpservice'
