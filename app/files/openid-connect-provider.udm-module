@@ -36,10 +36,11 @@ translation = univention.admin.localization.translation('univention.admin.handle
 _ = translation.translate
 
 module = 'oidc/rpservice'
+superordinate = 'settings/cn'
 childs = 0
-short_description = _(u'OIDC Provider relying party services')
-long_description = _(u'Management of OpenID provider configurations for services')
-operations = ['add', 'edit', 'remove', 'search']
+short_description = _(u'OpenID Connect relying party service')
+long_description = _(u'Management of OpenID provider configuration for services')
+operations = ['add', 'edit', 'remove', 'search', 'move']
 default_containers = ["cn=oidc,cn=univention"]
 help_text = _(u'Management of OpenID provider configurations for services')
 
