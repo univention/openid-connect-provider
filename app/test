@@ -24,28 +24,28 @@ trap "{
 }" EXIT
 
 # create entry
-udm oidc/rpservice create --set name="$test_service" --set clientid="testid" --set clientsecret="secret" --set applicationtype="web" --set redirectURI="https://univention.de"
+udm oidc/rpservice --binddn "$binddn" --bindpwdfile "$bindpwdfile" create --set name="$test_service" --set clientid="testid" --set clientsecret="secret" --set applicationtype="web" --set redirectURI="https://univention.de"
 
 sleep 5
 # listener, the service name should be in this file
 grep "name: testservice" /etc/kopano/identifier-registration.yaml
 
 
-udm oidc/rpservice create --set name="$test_service_two" --set clientid="testid" --set clientsecret="secret" --set applicationtype="web" --set redirectURI="https://univention.de"
+udm oidc/rpservice create --binddn "$binddn" --bindpwdfile "$bindpwdfile" --set name="$test_service_two" --set clientid="testid" --set clientsecret="secret" --set applicationtype="web" --set redirectURI="https://univention.de"
 sleep 5
 grep "name: testservice2" /etc/kopano/identifier-registration.yaml
 
 # modify
-udm oidc/rpservice modify --dn "cn=$test_service",dc=ucs,dc=local --set clientsecret="modifiedsecret"
+udm oidc/rpservice modify --binddn "$binddn" --bindpwdfile "$bindpwdfile" --dn "cn=$test_service",dc=ucs,dc=local --set clientsecret="modifiedsecret"
 sleep 5
 grep "secret: modifiedsecret" /etc/kopano/identifier-registration.yaml
 
-udm users/user create --position cn=users,"$ldap_base" --set lastname=univention --set username=univention --set password=univention
+udm users/user --binddn "$binddn" --bindpwdfile "$bindpwdfile" create --position cn=users,"$ldap_base" --set lastname=univention --set username=univention --set password=univention
 ! univention-ldapsearch -xLLL -D uid=univention,cn=users,dc=ucs,dc=local -w univention cn="test_service" | grep modifiedsecret
 
 # delete
-udm oidc/rpservice remove --dn "cn=$test_service",dc=ucs,dc=local
-udm oidc/rpservice remove --dn "cn=$test_service_two",dc=ucs,dc=local
+udm oidc/rpservice --binddn "$binddn" --bindpwdfile "$bindpwdfile" remove --dn "cn=$test_service",dc=ucs,dc=local
+udm oidc/rpservice --binddn "$binddn" --bindpwdfile "$bindpwdfile" remove --dn "cn=$test_service_two",dc=ucs,dc=local
 sleep 5
 ! grep "name: testservice2" /etc/kopano/identifier-registration.yaml
 ! grep "name: testservice" /etc/kopano/identifier-registration.yaml
