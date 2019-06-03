@@ -53,4 +53,19 @@ EOF
 fi
 
 echo "setting process of container to the id of the kopano or nobody user"
-ucr set appcenter/apps/openid-connect-provider/docker/params="--read-only --user=$KOPANOUID:$KOPANOGID"
+ucr set appcenter/apps/openid-connect-provider/docker/params?"--read-only --user=$KOPANOUID:$KOPANOGID"
+
+echo "set default values for app settings"
+ucr set oidc/konnectd/issuer_identifier?"https://$(ucr get ucs/server/sso/fqdn)"
+ucr set oidc/konnectd/allow_dynamic_client_registration?false
+
+if [ ! -f /etc/kopano/konnectd.cfg ]; then
+	echo "creating konnectd.cfg"
+	touch /etc/kopano/konnectd.cfg
+	chmod 750 /etc/kopano/konnectd.cfg
+	chown root:$KOPANOGID /etc/kopano/konnectd.cfg
+	cat << EOF >"/etc/kopano/konnectd.cfg"
+oidc_issuer_identifier=https://$ucs_server_sso_fqdn
+allow_dynamic_client_registration=no
+EOF
+fi

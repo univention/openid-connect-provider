@@ -24,7 +24,7 @@ die () {
 	exit 1
 }
 
-[ "$IGN_GIT" != "true" ] && test -n "$(git status -s)" && die "Changes in repo, do not upload app!"
+[ "$IGN_GIT" != "true" ] && test -n "$(git status -s)" && die "Changes in repo, do not upload app! (to override: IGN_GIT=true)"
 
 # preinst
 cp app/preinst.tmpl preinst
@@ -43,7 +43,7 @@ cp app/configure_host.tmpl configure_host
 
 
 # upload
-selfservice upload "$APP_VERSION" app/env app/uinst app/test preinst inst configure_host
+selfservice upload "$APP_VERSION" app/env app/uinst app/test app/settings preinst inst configure_host README*
 
 rm -f inst
 rm -f configure_host

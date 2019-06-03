@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=1
+VERSION=2
 SERVICE="Kopano-Konnect"
 
 . /usr/share/univention-join/joinscripthelper.lib
@@ -32,9 +32,11 @@ univention-directory-manager container/cn create "$@" --ignore_exists \
     --set description="OpenID Connect service definitions" || die
 
 
-cat << EOF >/etc/apache2/ucs-sites.conf.d/openid-connect-provider.conf
+cat << EOF >/etc/apache2/conf-available/openid-connect-provider.conf
 %OIDC_PROVIDER_APACHE_CONF%
 EOF
+
+ln -sf /etc/apache2/conf-available/openid-connect-provider.conf /etc/apache2/sso-vhost.conf.d/openid-connect-provider.conf
 
 invoke-rc.d apache2 reload
 

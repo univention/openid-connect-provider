@@ -1,0 +1,17 @@
+[oidc/konnectd/issuer_identifier]
+Description = OpenID Connect Issuer Identifier. Setting this is mandatory and the setting must be a https URL which can be accessed by all applications and users.
+Description[de] = OpenID Connect Issuer Identifier. Diese Einstellung muss gesetzt sein, die hier konfiguriertre https URL muss von allen Applikationen und Benutzern erreichbar sein.
+Type = String
+InitialValue = https://@%@ucs/server/sso/fqdn@%@
+Required = false
+Show = Settings
+Scope = outside
+
+[oidc/konnectd/allow_dynamic_client_registration]
+Description = Allow dynamic client registration. When activated, clients can register themselves and make authorized calls to the token endpoint.
+Description[de] = Dynamische Clientregistrierung erlauben. Bei Aktivierung können sich Clients selbst anmelden und Aufrufe gegen den Tokenendpunkt durchführen.
+Type = Bool
+InitialValue = false
+Required = false
+Show = Settings
+Scope = outside
