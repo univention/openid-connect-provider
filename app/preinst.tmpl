@@ -56,7 +56,14 @@ echo "setting process of container to the id of the kopano or nobody user"
 ucr set appcenter/apps/openid-connect-provider/docker/params?"--read-only --user=$KOPANOUID:$KOPANOGID"
 
 echo "set default values for app settings"
-ucr set oidc/konnectd/issuer_identifier?"https://$(ucr get ucs/server/sso/fqdn)"
+if [ "$server_role" == "domaincontroller_master" -o "$server_role" == "domaincontroller_backup" ]; then
+	# use sso vhost on DC Master and Backup
+	ucr set oidc/konnectd/issuer_identifier?"https://$(ucr get ucs/server/sso/fqdn)"
+else
+	# use local hostname on other roles
+	ucr set oidc/konnectd/issuer_identifier?"https://$hostname.$domainname"
+fi
+
 ucr set oidc/konnectd/allow_dynamic_client_registration?false
 
 if [ ! -f /etc/kopano/konnectd.cfg ]; then

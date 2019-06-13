@@ -32,11 +32,18 @@ univention-directory-manager container/cn create "$@" --ignore_exists \
     --set description="OpenID Connect service definitions" || die
 
 
+# apache2 config
 cat << EOF >/etc/apache2/conf-available/openid-connect-provider.conf
 %OIDC_PROVIDER_APACHE_CONF%
 EOF
 
-ln -sf /etc/apache2/conf-available/openid-connect-provider.conf /etc/apache2/sso-vhost.conf.d/openid-connect-provider.conf
+if [ "$server_role" == "domaincontroller_master" -o "$server_role" == "domaincontroller_backup" ]; then
+	# Make provider available at https://ucs-sso.<domain> vhost on DC Master and Backup
+	ln -sf /etc/apache2/conf-available/openid-connect-provider.conf /etc/apache2/sso-vhost.conf.d/openid-connect-provider.conf
+else
+	# Make provider available at https://$hostname.$domainname vhost on other roles
+	ln -sf /etc/apache2/conf-available/openid-connect-provider.conf /etc/apache2/ucs-sites.conf.d/openid-connect-provider.conf
+fi
 
 invoke-rc.d apache2 reload
 
