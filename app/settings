@@ -1,8 +1,7 @@
 [oidc/konnectd/issuer_identifier]
-Description = OpenID Connect Issuer Identifier. Setting this is mandatory and the setting must be a https URL which can be accessed by all applications and users.
-Description[de] = OpenID Connect Issuer Identifier. Diese Einstellung muss gesetzt sein, die hier konfiguriertre https URL muss von allen Applikationen und Benutzern erreichbar sein.
+Description = OpenID Connect Issuer Identifier. Setting this is mandatory and the setting must be a https URL which can be accessed by all applications and users. Adapting this value ONLY changes the configuration of the OpenID service. In addition, the apache2 configuration has to be adapted, the configuration for the provider is defined in /etc/apache2/conf-available/openid-connect-provider.conf
+Description[de] = OpenID Connect Issuer Identifier. Diese Einstellung muss gesetzt sein, die hier konfiguriertre https URL muss von allen Applikationen und Benutzern erreichbar sein. Das Anpassen dieses Wertes ändert nur die Konfiguration des OpenID Dienstes. Zusätzlich muss die apache2 Konfiguration angepasst werden, die in  /etc/apache2/conf-available/openid-connect-provider.conf definiert ist.
 Type = String
-InitialValue = https://@%@ucs/server/sso/fqdn@%@
 Required = false
 Show = Settings
 Scope = outside
