@@ -1,7 +1,7 @@
 Ein OpenID Connect Provider, basierend auf <a href="https://github.com/Kopano-dev/konnect">Kopano Konnect</a>.
 <br>
 <br>
-Die Konfigurationsoptionen für anzubindende Dienste können hier abgerufen werden: <a href="/.well-known/openid-configuration" target="_blank">/.well-known/openid-configuration</a>.
+Die Konfigurationsoptionen für anzubindende Dienste können per HTTPS Protokoll auf dem in den App Settings konfigurierten Hostnamen unter dem Pfad /.well-known/openid-configuration abgerufen werden. Der Standardwert nach der App Installation auf DC Master und Backup Systemen ist https://ucs-sso.<UCS-Domänenname>/.well-known/openid-configuration. Auf anderen Serverrollen sind die Metainformationen im selben Pfad über den Hostnamen erreichbar.
 <br>
 <br>
 Neue Dienste können im UMC LDAP-Browsermodul hinzugefügt werden: Im Container 'oidc' unterhalb des Containers 'univention' kann ein neues Objekt vom Typ 'OpenID Connect relying party service' hinzugefügt werden. Zusätzlich kann per udm ein Eintrag erzeugt werden:
