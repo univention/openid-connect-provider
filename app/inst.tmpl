@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=2
+VERSION=3
 SERVICE="Kopano-Konnect"
 
 . /usr/share/univention-join/joinscripthelper.lib
@@ -68,17 +68,21 @@ cat << EOF >"/usr/share/univention-openid-connect-provider/openid-connect-provid
 EOF
 
 # LDAP ACL
-cat << EOF >"/usr/share/univention-openid-connect-provider/66openid-connect-provider.ldapacl"
+cat << EOF >"/usr/share/univention-openid-connect-provider/58openid-connect-provider.ldapacl"
 %OIDC_PROVIDER_ACL%
 EOF
 
 ucs_registerLDAPExtension "$@" \
 	--packagename openid-connect-provider \
 	--packageversion 0.1 \
-    --schema /usr/share/univention-openid-connect-provider/openid-connect-provider.schema \
-    --udm_module /usr/share/univention-openid-connect-provider/openid-connect-provider-udm-module.py \
-	--acl /usr/share/univention-openid-connect-provider/66openid-connect-provider.ldapacl || die
+	--schema /usr/share/univention-openid-connect-provider/openid-connect-provider.schema \
+	--udm_module /usr/share/univention-openid-connect-provider/openid-connect-provider-udm-module.py \
+	--acl /usr/share/univention-openid-connect-provider/58openid-connect-provider.ldapacl || die
 
+if [ $JS_LAST_EXECUTED_VERSION -lt 3 -a $JS_LAST_EXECUTED_VERSION -gt 0 ]; then
+	rm /usr/share/univention-openid-connect-provider/66openid-connect-provider.ldapacl
+	ucs_unregisterLDAPExtension "$@" --acl 66openid-connect-provider.ldapacl || die
+fi
 
 # Update Container LDAP credentials
 echo -n "$(ucr get appcenter/apps/openid-connect-provider/hostdn)" > /etc/kopano/konnectd.ldap_binddn
