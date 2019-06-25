@@ -1,13 +1,24 @@
 @!@
+from univention.lib.misc import custom_groupname
+from ldap.dn import escape_dn_chars
 params = {}
 params['base'] = configRegistry['ldap/base']
+params['domain_admins'] = escape_dn_chars(custom_groupname('Domain Admins'))
 
-print '''
-access to filter="objectClass=univentionOIDCService" attrs=entry,clientid,clientsecret,applicationType,redirectURI,trusted
-	by set="user & [cn=Domain Admins,cn=groups,%(base)s]/uniqueMember*" write
+print('''
+access to filter="objectClass=univentionOIDCService" attrs=clientsecret
+	by set="user & [cn=%(domain_admins)s,cn=groups,%(base)s]/uniqueMember*" write
 	by dn.onelevel="cn=dc,cn=computers,%(base)s" read
 	by dn.onelevel="cn=memberserver,cn=computers,%(base)s" read
-	by * none
+	by * none stop
 
-''' % params
+''' % params)
+print('''
+access to filter="objectClass=univentionOIDCService" attrs=entry,clientid,applicationType,redirectURI,trusted
+	by set="user & [cn=%(domain_admins)s,cn=groups,%(base)s]/uniqueMember*" write
+	by dn.onelevel="cn=dc,cn=computers,%(base)s" +rscxd
+	by dn.onelevel="cn=memberserver,cn=computers,%(base)s" +rscxd
+	by * +0 break
+
+''' % params)
 @!@
