@@ -20,17 +20,17 @@ mkdir -p /etc/kopano/
 export RANDFILE=/etc/kopano/.rnd
 
 # create encryption key if not already present
-if [ ! -f /etc/kopano/konnectd-encryption.key ]; then
+if [ ! -f /etc/kopano/konnectd-encryption-secret.key ]; then
 	echo "creating new encryption key"
-	openssl rand -out /etc/kopano/konnectd-encryption.key 32
+	openssl rand -out /etc/kopano/konnectd-encryption-secret.key 32
 fi
 
 # create token signing key if not already present
-if [ ! -f /etc/kopano/konnectd-tokens-signing-key.pem ]; then
+if [ ! -f /etc/kopano/konnectd-signing-private-key.pem ]; then
 	echo "creating new token signing key"
-	openssl genpkey -algorithm RSA -out /etc/kopano/konnectd-tokens-signing-key.pem -pkeyopt rsa_keygen_bits:4096
+	openssl genpkey -algorithm RSA -out /etc/kopano/konnectd-signing-private-key.pem -pkeyopt rsa_keygen_bits:4096
 fi
-chown $KOPANOUID:$KOPANOGID /etc/kopano/konnectd-tokens-signing-key.pem
+chown $KOPANOUID:$KOPANOGID /etc/kopano/konnectd-signing-private-key.pem
 
 # Add preliminary LDAP credentials if not existing
 # Using docker host credentials here
