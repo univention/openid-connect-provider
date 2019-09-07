@@ -39,7 +39,7 @@ import univention.debug as ud
 name = 'openid-connect-provider'
 description = 'Update oidc provider service configuration'
 filter = '(objectClass=univentionOIDCService)'
-target_file = '/etc/kopano/identifier-registration.yaml'
+target_file = '/etc/kopano/konnectd-identifier-registration.yaml'
 attributes = []
 
 
