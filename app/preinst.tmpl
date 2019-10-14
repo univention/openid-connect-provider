@@ -19,18 +19,10 @@ mkdir -p /etc/kopano/
 # make sure a valid directory for temporary files for openssl is provided
 export RANDFILE=/etc/kopano/.rnd
 
-# create encryption key if not already present
-if [ ! -f /etc/kopano/konnectd-encryption-secret.key ]; then
-	echo "creating new encryption key"
-	openssl rand -out /etc/kopano/konnectd-encryption-secret.key 32
-fi
-
-# create token signing key if not already present
-if [ ! -f /etc/kopano/konnectd-signing-private-key.pem ]; then
-	echo "creating new token signing key"
-	openssl genpkey -algorithm RSA -out /etc/kopano/konnectd-signing-private-key.pem -pkeyopt rsa_keygen_bits:4096
-fi
-chown $KOPANOUID:$KOPANOGID /etc/kopano/konnectd-signing-private-key.pem
+# create files so that konnect can write to it
+touch /kopano/ssl/konnectd-identifier-registration.yaml /kopano/ssl/ecparam.pem /kopano/ssl/meet-kwmserver.pem
+# chown to the numerical representation of nobody/nogroup
+chown 65534:65534 /kopano/ssl/konnectd-identifier-registration.yaml /kopano/ssl/ecparam.pem /kopano/ssl/meet-kwmserver.pem
 
 # Add preliminary LDAP credentials if not existing
 # Using docker host credentials here
