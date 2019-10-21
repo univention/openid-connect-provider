@@ -17,7 +17,10 @@ docker run --env-file /var/lib/univention-appcenter/apps/openid-connect-provider
 	--volume /etc/kopano:/etc/kopano:ro \
 	--volume /var/konnect-login:/var/lib/konnectd-docker/identifier-univention:rw \
 	--publish 127.0.0.1:8777:8777 \
-	kopano/konnectd:0.9.0 \
-	--iss=https://master.ucs.local \
- 	--identifier-client-path ./identifier-univention \
+	kopano/konnectd:0.23.3 \
+	--identifier-client-path ./identifier-univention \
+	--identifier-registration-conf /etc/kopano/identifier-registration.yaml \
+	--iss="https://$(ucr get ucs/server/sso/fqdn)" \
+	--insecure \
+	--log-level debug \
 	serve ldap
