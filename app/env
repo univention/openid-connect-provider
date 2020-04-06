@@ -1,8 +1,7 @@
 ARGS=--identifier-client-path ./identifier-univention
 LDAP_URI=ldap://@%@ldap/server/name@%@:7389
 LDAP_BINDDN=@%@appcenter/apps/openid-connect-provider/hostdn@%@
-KONNECTD_LDAP_BIND_DN_FILE=konnectd.ldap_binddn
-KONNECTD_LDAP_BIND_PASSWORD_FILE=konnectd.machine.secret
+LDAP_BINDPW_FILE=/var/run/secrets/konnectd.machine.secret
 LDAP_BASEDN=@%@ldap/base@%@
 LDAP_SCOPE=sub
 LDAP_LOGIN_ATTRIBUTE=uid
@@ -12,3 +11,5 @@ LDAP_UUID_ATTRIBUTE=uidNumber
 LDAP_UUID_ATTRIBUTE_TYPE=text
 LDAP_FILTER=(objectClass=organizationalPerson)
 KONNECT_BACKEND=ldap
+ecparam=/etc/kopano/konnectd-encryption-secret.key
+eckey=/etc/kopano/konnectd-signing-private-key.pem
