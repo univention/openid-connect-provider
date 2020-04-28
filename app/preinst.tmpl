@@ -42,6 +42,8 @@ if [ ! -f /etc/kopano/konnectd.ldap_binddn -o ! -f /etc/kopano/konnectd.machine.
 	chown "$KOPANOUID":"$KOPANOGID" /etc/kopano/konnectd.ldap_binddn /etc/kopano/konnectd.machine.secret
 fi
 
+touch /etc/kopano/konnectd-identifier-scopes.yaml
+
 if [ ! -f /etc/kopano/konnectd-identifier-registration.yaml ]; then
 	echo "creating template client registration"
 	touch /etc/kopano/konnectd-identifier-registration.yaml
@@ -53,18 +55,7 @@ EOF
 fi
 
 echo "setting process of container to the id of the kopano or nobody user"
-ucr set appcenter/apps/openid-connect-provider/docker/params?"--read-only --user=$KOPANOUID:$KOPANOGID"
-
-echo "set default values for app settings"
-if [ "$server_role" == "domaincontroller_master" -o "$server_role" == "domaincontroller_backup" ]; then
-	# use sso vhost on DC Master and Backup
-	ucr set oidc/konnectd/issuer_identifier?"https://$(ucr get ucs/server/sso/fqdn)"
-else
-	# use local hostname on other roles
-	ucr set oidc/konnectd/issuer_identifier?"https://$hostname.$domainname"
-fi
-
-ucr set oidc/konnectd/allow_dynamic_client_registration?false
+ucr set appcenter/apps/openid-connect-provider/docker/params?"--user=$KOPANOUID:$KOPANOGID"
 
 if [ ! -f /etc/kopano/konnectd.cfg ]; then
 	echo "creating konnectd.cfg"

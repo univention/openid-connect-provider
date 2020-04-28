@@ -21,6 +21,8 @@ ucs_unregisterLDAPExtension "$@" \
 	--udm_module oidc/rpservice \
 	--acl 58openid-connect-provider.ldapacl || die
 
+udm saml/serviceprovider remove --dn "SAMLServiceProviderIdentifier=openid-connect-provider,cn=saml-serviceprovider,cn=univention,${ldap_base}"
+
 # remove listener module
 rm -f /usr/lib/univention-directory-listener/system/openid-connect-provider-listener.py
 service univention-directory-listener restart

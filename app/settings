@@ -1,10 +1,9 @@
 [oidc/konnectd/issuer_identifier]
-Description = OpenID Connect Issuer Identifier. Setting this is mandatory and the setting must be a https URL which can be accessed by all applications and users. Adapting this value ONLY changes the configuration of the OpenID service. In addition, the apache2 configuration has to be adapted, the configuration for the provider is defined in /etc/apache2/conf-available/openid-connect-provider.conf
-Description[de] = OpenID Connect Issuer Identifier. Diese Einstellung muss gesetzt sein, die hier konfiguriertre https URL muss von allen Applikationen und Benutzern erreichbar sein. Das Anpassen dieses Wertes ändert nur die Konfiguration des OpenID Dienstes. Zusätzlich muss die apache2 Konfiguration angepasst werden, die in  /etc/apache2/conf-available/openid-connect-provider.conf definiert ist.
+Description = OpenID Connect Issuer Identifier. The URL where the IdP can be reached. Setting this is mandatory and the setting must be a https URL which can be accessed by all applications and users. Adapting this value ONLY changes the configuration of the OpenID service. In addition, the apache2 configuration may have to be adapted, the configuration for the provider is defined in /etc/apache2/conf-available/openid-connect-provider.conf
+Description[de] = OpenID Connect Issuer Identifier. Die URL unter der der Idp erreichbar ist. Diese Einstellung muss gesetzt sein, und die hier konfigurierte https URL muss von allen Applikationen und Benutzern erreichbar sein. Das Anpassen dieses Wertes ändert nur die Konfiguration des OpenID Dienstes. Bei Bedarf ist die apache2 Konfiguration anzupassen, die in /etc/apache2/conf-available/openid-connect-provider.conf definiert ist.
 Type = String
 Required = false
 Show = Settings
-Scope = outside
 
 [oidc/konnectd/allow_dynamic_client_registration]
 Description = Allow dynamic client registration. When activated, clients can register themselves and make authorized calls to the token endpoint.
@@ -13,4 +12,19 @@ Type = Bool
 InitialValue = false
 Required = false
 Show = Settings
-Scope = outside
+
+[oidc/konnectd/saml2_metadata_url]
+Description = URL where the openid-connect-provider will retrieve the SAML2 IdP metadata.
+Description[de] = URL unter der der openid-connect-provider die SAML2 IdP Metadaten finden kann.
+Type = String
+Required = true
+InitialValue = https://ucs-sso.@%@domainname@%@/simplesamlphp/saml2/idp/metadata.php
+Show = Settings
+
+[oidc/konnectd/signing_method]
+Description = JWT default signing method. Default "PS256". Valid values: PKCS#1 based variants (RS256,RS384,RS512) or ECDSA (ES256,ES384,ES512)
+Description[de] = JWT default signing method. Default "PS256". Valid values: PKCS#1 based variants (RS256,RS384,RS512) or ECDSA (ES256,ES384,ES512)
+Type = String
+Required = true
+InitialValue = PS256
+Show = Settings

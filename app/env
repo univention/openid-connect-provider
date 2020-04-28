@@ -1,4 +1,6 @@
-ARGS=--identifier-client-path ./identifier-univention
+ARGS=--log-level=debug
+DEBUG=true
+KOPANO_SURVEYCLIENT_AUTOSURVEY=no
 LDAP_URI=ldap://@%@ldap/server/name@%@:7389
 LDAP_BINDDN=@%@appcenter/apps/openid-connect-provider/hostdn@%@
 LDAP_BINDPW_FILE=/var/run/secrets/konnectd.machine.secret
@@ -11,5 +13,5 @@ LDAP_UUID_ATTRIBUTE=uidNumber
 LDAP_UUID_ATTRIBUTE_TYPE=text
 LDAP_FILTER=(objectClass=organizationalPerson)
 KONNECT_BACKEND=ldap
-ecparam=/etc/kopano/konnectd-encryption-secret.key
+encryption_secret_key=/etc/kopano/konnectd-encryption-secret.key
 eckey=/etc/kopano/konnectd-signing-private-key.pem

@@ -3,6 +3,8 @@
 set -e
 set -x
 
+# Put app provider portal username into $HOME/.univention-appcenter-user and the password into $HOME/.univention-appcenter-pwd
+
 APP_VERSION="4.3/openid-connect-provider"
 
 selfservice () {
@@ -38,12 +40,9 @@ sed -i -e "/%OIDC_PROVIDER_SCHEMA%/r app/files/openid-connect-provider.schema" -
 sed -i -e "/%OIDC_PROVIDER_UDM_MODULE%/r app/files/openid-connect-provider.udm-module" -e "/%OIDC_PROVIDER_UDM_MODULE%/d" inst
 sed -i -e "/%OIDC_PROVIDER_ACL%/r app/files/openid-connect-provider.ldapacl" -e "/%OIDC_PROVIDER_ACL%/d" inst
 
-# config
-cp app/configure_host.tmpl configure_host
-
 
 # upload
-selfservice upload "$APP_VERSION" app/env app/uinst app/test app/settings preinst inst configure_host README*
+selfservice upload "$APP_VERSION" app/env app/uinst app/test app/settings app/configure app/configure_host preinst inst README*
 
 rm -f inst
 rm -f configure_host
