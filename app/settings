@@ -28,3 +28,11 @@ Type = String
 Required = true
 InitialValue = PS256
 Show = Settings
+
+[oidc/konnectd/signed_out_uri]
+Description = Send browser to this URL after the user logged out of the OIDC provider
+Description[de] = Den Browser des Bentzers an die angegebene URL weiterleiten, nachdem er sich am OIDC Provider abgemeldet hat
+Type = String
+Required = true
+InitialValue = https://@%@hostname@%@.@%@domainname@%@
+Show = Settings
