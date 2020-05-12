@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=3
+VERSION=4
 SERVICE="Kopano-Konnect"
 
 . /usr/share/univention-join/joinscripthelper.lib
@@ -84,19 +84,35 @@ if [ $JS_LAST_EXECUTED_VERSION -lt 3 -a $JS_LAST_EXECUTED_VERSION -gt 0 ]; then
 	ucs_unregisterLDAPExtension "$@" --acl 66openid-connect-provider.ldapacl || die
 fi
 
-# TODO: if object exists, modify ACS and SLO url
-udm saml/serviceprovider create "$@" \
-	--ignore_exists \
-	--position "cn=saml-serviceprovider,cn=univention,$ldap_base" \
-	--set isActivated=TRUE \
-	--set Identifier="openid-connect-provider" \
-	--set AssertionConsumerService="${oidc_konnectd_issuer_identifier}/signin/v1/identifier/saml2/acs" \
-	--set singleLogoutService="${oidc_konnectd_issuer_identifier}/signin/v1/identifier/_/saml2/slo" \
-	--set NameIDFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" \
-	--set simplesamlNameIDAttribute="uid" \
-	--set simplesamlAttributes=TRUE \
-	--set LDAPattributes="uid" \
-	--set attributesNameFormat=urn:oasis:names:tc:SAML:2.0:attrname-format:basic || die
+if [ $JS_LAST_EXECUTED_VERSION -lt 4 -a $JS_LAST_EXECUTED_VERSION -gt 0 ]; then
+	# in app update to version 2+ the filename and layout of file written to by listener
+	# changed - resync it here to have listener write to new file
+	univention-directory-listener-ctrl resync openid-connect-provider
+fi
+
+# SAML Service provider object, required for SAML SSO Login into OIDC Provider
+if ! udm saml/serviceprovider list --filter SAMLServiceProviderIdentifier=openid-connect-provider | grep -q "DN:"; then
+	# if serviceprovider object does not exist (new installation), create it
+	udm saml/serviceprovider create "$@" \
+		--ignore_exists \
+		--position "cn=saml-serviceprovider,cn=univention,$ldap_base" \
+		--set isActivated=TRUE \
+		--set Identifier="openid-connect-provider" \
+		--set AssertionConsumerService="${oidc_konnectd_issuer_identifier}/signin/v1/identifier/saml2/acs" \
+		--set singleLogoutService="${oidc_konnectd_issuer_identifier}/signin/v1/identifier/_/saml2/slo" \
+		--set NameIDFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" \
+		--set simplesamlNameIDAttribute="uid" \
+		--set simplesamlAttributes=TRUE \
+		--set LDAPattributes="uid" \
+		--set attributesNameFormat=urn:oasis:names:tc:SAML:2.0:attrname-format:basic || die
+else
+	# if object exists, modify ACS and SLO url
+	# usecase: app setting for oidc_konnectd_issuer_identifier did change
+	udm saml/serviceprovider modify "$@" \
+		--dn "SAMLServiceProviderIdentifier=openid-connect-provider,cn=saml-serviceprovider,cn=univention,$ldap_base" \
+		--set AssertionConsumerService="${oidc_konnectd_issuer_identifier}/signin/v1/identifier/saml2/acs" \
+		--set singleLogoutService="${oidc_konnectd_issuer_identifier}/signin/v1/identifier/_/saml2/slo" || die
+fi
 
 # Update Container LDAP credentials
 echo -n "$(ucr get appcenter/apps/openid-connect-provider/hostdn)" > /etc/kopano/konnectd.ldap_binddn

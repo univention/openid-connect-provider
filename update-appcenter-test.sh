@@ -42,7 +42,7 @@ sed -i -e "/%OIDC_PROVIDER_ACL%/r app/files/openid-connect-provider.ldapacl" -e 
 
 
 # upload
-selfservice upload "$APP_VERSION" app/env app/uinst app/test app/settings app/configure app/configure_host preinst inst README*
+selfservice upload "$APP_VERSION" app/env app/uinst app/test app/settings app/configure app/configure_host preinst inst README_*
 
 rm -f inst
 rm -f configure_host

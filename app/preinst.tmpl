@@ -6,7 +6,13 @@ eval $(ucr shell)
 
 set -x
 
-# get numberical user and group id of the kopano user
+# test if docker container is configured to read-only from early app versions.
+# remove setting from UCRv
+if ucr get appcenter/apps/openid-connect-provider/docker/params | grep -q read-only; then
+	ucr set appcenter/apps/openid-connect-provider/docker/params="${appcenter_apps_openid_connect_provider_docker_params/--read-only/}"
+fi
+
+# get numerical user and group id of the kopano user
 if id kopano >/dev/null 2>&1; then
 	KOPANOUID=$(id -u kopano)
 	KOPANOGID=$(id -g kopano)
@@ -43,6 +49,11 @@ if [ ! -f /etc/kopano/konnectd.ldap_binddn -o ! -f /etc/kopano/konnectd.machine.
 fi
 
 touch /etc/kopano/konnectd-identifier-scopes.yaml
+
+# rename in update to app version 2+; will be recreated below with new filename + layout, listener resync happens in joinscript
+if [ -e /etc/kopano/identifier-registration.yaml ]; then
+	rm /etc/kopano/identifier-registration.yaml
+fi
 
 if [ ! -f /etc/kopano/konnectd-identifier-registration.yaml ]; then
 	echo "creating template client registration"

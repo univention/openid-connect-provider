@@ -51,7 +51,8 @@ def handler(dn, new, old):
 			filecontent = yaml.safe_load(config)
 			# Remove old entry. If it was modified, it will be readded below
 			if old:
-				filecontent['clients'] = [client for client in filecontent['clients'] if client['name'] != old['cn'][0]]
+				if filecontent['clients']: # is empty when no relying party exists
+					filecontent['clients'] = [client for client in filecontent['clients'] if client['name'] != old['cn'][0]]
 			if new:
 				client = {}
 				client['name'] = new['cn'][0]

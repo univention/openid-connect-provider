@@ -1,13 +1,37 @@
 #!/bin/bash
 
+eval "$(ucr shell)"
+
 set -x
-#fqdn_extern=$(sed -n 's/^oidc\/konnectd\/issuer_identifier: \(.*\)/\1/p' /etc/univention/base.conf)
-#dyn_registration="no"
-#dyn_registration_from_config=$(sed -n 's/^oidc\/konnectd\/allow_dynamic_client_registration: \(.*\)/\1/p' /etc/univention/base.conf)
-#[ "$dyn_registration_from_config" = "true" ] && dyn_registration="yes"
 
-#test -n "$fqdn_extern" && sed -i "s|^.*oidc_issuer_identifier.*$|oidc_issuer_identifier=${fqdn_extern}|g" /etc/kopano/konnectd.cfg
-#test -n "$dyn_registration" && sed -i "s/^.*allow_dynamic_client_registration.*$/allow_dynamic_client_registration=${dyn_registration}/g" /etc/kopano/konnectd.cfg
+# Does the SAML configuration for the OIDC app match
+# the iss parameter from the app settings with the
+# SAML service provider config for the app?
+# If not, the object has to be updated
+ACSserviceurl="$(univention-ldapsearch -LLL SAMLServiceProviderIdentifier=openid-connect-provider AssertionConsumerService | ldapsearch-wrapper | grep AssertionConsumerService)"
+# check if LDAP attribute does not start with expected value from app setting
+if ! [[ "$ACSserviceurl" == "AssertionConsumerService: $oidc_konnectd_issuer_identifier"* ]]; then
+	# oidc is installed, but saml config contains wrong URI
+	serverrole="$(ucr get server/role)"
+	case $serverrole in
+		domaincontroller_master|domaincontroller_backup)
+			# can be run on dc master+backup
+			# but only if no joinscript is currently running
+			if ! pgrep -cf "/bin/bash /usr/sbin/univention-run-join-scripts --force --run-scripts 50openid-connect-provider.inst"; then
+				univention-run-join-scripts --force --run-scripts 50openid-connect-provider.inst
+			fi
+			;;
+		*)
+			# admin has to run joinscript manually, will be shown as pending
+			sed -i "/^openid-connect-provider v/d" /var/univention-join/status
+			;;
+	esac
+else
+	echo "SAML config for openid-connect-provider seems to contain correct URI for AssertionConsumerService"
+fi
 
+# Do not restart container when about to remove app
+[[ "$1" -eq "remove" ]] && exit 0
 
+# restart, because changes by configure script inside container require container restart
 echo "sleep 5; univention-app restart openid-connect-provider" | at now

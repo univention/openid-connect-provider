@@ -4,6 +4,7 @@ Description[de] = OpenID Connect Issuer Identifier. Die URL unter der der Idp er
 Type = String
 Required = false
 Show = Settings
+Scope = inside, outside
 
 [oidc/konnectd/allow_dynamic_client_registration]
 Description = Allow dynamic client registration. When activated, clients can register themselves and make authorized calls to the token endpoint.
