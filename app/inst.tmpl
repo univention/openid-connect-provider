@@ -7,6 +7,7 @@ SERVICE="Kopano-Konnect"
 . /usr/share/univention-appcenter/joinscripthelper.sh
 . /usr/share/univention-lib/ldap.sh
 . /usr/share/univention-lib/base.sh
+. /usr/share/univention-lib/ucr.sh
 
 joinscript_init
 eval "$(ucr shell)"
@@ -128,6 +129,14 @@ if ! univention-app shell openid-connect-provider grep "oidc/konnectd/issuer_ide
 		# use local hostname on other roles
 		univention-app configure openid-connect-provider --set oidc/konnectd/issuer_identifier="https://$hostname.$domainname"
 	fi
+fi
+
+# Add OIDC SAML sp config to domain users group, if not deactivated by app settings
+# everyone in that group can then access services via the openid connect provider
+if ! is_ucr_true oidc/saml/do_not_add_oidc_to_domain_users_group; then
+	udm groups/group modify "$@" \
+		--dn "cn=$(custom_groupname 'Domain Users'),cn=groups,dc=mydomain,dc=intranet" \
+		--append "serviceprovidergroup=SAMLServiceProviderIdentifier=openid-connect-provider,cn=saml-serviceprovider,cn=univention,$ldap_base"
 fi
 
 service univention-directory-listener restart || die

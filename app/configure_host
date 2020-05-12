@@ -4,30 +4,33 @@ eval "$(ucr shell)"
 
 set -x
 
-# Does the SAML configuration for the OIDC app match
-# the iss parameter from the app settings with the
-# SAML service provider config for the app?
-# If not, the object has to be updated
-ACSserviceurl="$(univention-ldapsearch -LLL SAMLServiceProviderIdentifier=openid-connect-provider AssertionConsumerService | ldapsearch-wrapper | grep AssertionConsumerService)"
-# check if LDAP attribute does not start with expected value from app setting
-if ! [[ "$ACSserviceurl" == "AssertionConsumerService: $oidc_konnectd_issuer_identifier"* ]]; then
-	# oidc is installed, but saml config contains wrong URI
-	serverrole="$(ucr get server/role)"
-	case $serverrole in
-		domaincontroller_master|domaincontroller_backup)
-			# can be run on dc master+backup
-			# but only if no joinscript is currently running
-			if ! pgrep -cf "/bin/bash /usr/sbin/univention-run-join-scripts --force --run-scripts 50openid-connect-provider.inst"; then
-				univention-run-join-scripts --force --run-scripts 50openid-connect-provider.inst
-			fi
-			;;
-		*)
-			# admin has to run joinscript manually, will be shown as pending
-			sed -i "/^openid-connect-provider v/d" /var/univention-join/status
-			;;
-	esac
-else
-	echo "SAML config for openid-connect-provider seems to contain correct URI for AssertionConsumerService"
+# only when not installing or not removing
+if ! ([ "$1" == "remove" ] || [ "$1" == "install" ]); then
+	# Does the SAML configuration for the OIDC app match
+	# the iss parameter from the app settings with the
+	# SAML service provider config for the app?
+	# If not, the object has to be updated
+	ACSserviceurl="$(univention-ldapsearch -LLL SAMLServiceProviderIdentifier=openid-connect-provider AssertionConsumerService | ldapsearch-wrapper | grep AssertionConsumerService)"
+	# check if LDAP attribute does not start with expected value from app setting
+	if ! [[ "$ACSserviceurl" == "AssertionConsumerService: $oidc_konnectd_issuer_identifier"* ]]; then
+		# oidc is installed, but saml config contains wrong URI
+		serverrole="$(ucr get server/role)"
+		case $serverrole in
+			domaincontroller_master|domaincontroller_backup)
+				# can be run on dc master+backup
+				# but only if no joinscript is currently running
+				if ! pgrep -cf "/bin/bash /usr/sbin/univention-run-join-scripts --force --run-scripts 50openid-connect-provider.inst"; then
+					univention-run-join-scripts --force --run-scripts 50openid-connect-provider.inst
+				fi
+				;;
+			*)
+				# admin has to run joinscript manually, will be shown as pending
+				sed -i "/^openid-connect-provider v/d" /var/univention-join/status
+				;;
+		esac
+	else
+		echo "SAML config for openid-connect-provider seems to contain correct URI for AssertionConsumerService"
+	fi
 fi
 
 # Do not restart container when about to remove app

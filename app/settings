@@ -37,3 +37,12 @@ Type = String
 Required = true
 InitialValue = https://@%@hostname@%@.@%@domainname@%@
 Show = Settings
+
+[oidc/saml/do_not_add_oidc_to_domain_users_group]
+Description = Do not add the SAML configuration to the Domain Users group. If this option is set, the configuration will not be changed in the future and the OpenID Connect Provider SAML configoption will not be readded to the group. The group will not be modified automatically after this setting is changed.
+Description[de] = Die SAML-Konfiguration nicht zur Gruppe Domänenbenutzer hinzufügen. Wenn diese Option gesetzt ist, wird die Konfiguration in Zukunft nicht mehr geändert und die OpenID Connect Provider SAML-Konfigurationsoption wird nicht wieder in die Gruppe aufgenommen werden. Die Gruppe wird nicht automatisch modifiziert, wenn diese Einstellung geändert wird.
+Type = Bool
+Required = true
+InitialValue = false
+Show = Settings
+Scope = inside, outside
