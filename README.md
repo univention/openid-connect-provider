@@ -35,11 +35,17 @@ get userinfo ->
 # Configuration
 
 The app is configured with app settings.
+
 Listener and configure scripts write to `/etc/kopano/konnectd-identifier-registration.yaml` and `/etc/kopano/konnectd.cfg`
+
 New service can be registered with the udm module oidc/rpservice.
+
 Only services below `cn=oidc,cn=univention,$ldap_base` are recognized.
+
 To integrate other services, they often require URIs for the identity provider endpoints, they are available at `https://ucs-sso.$domainname/.well-known/openid-configuration`
+
 By default the App registers the oidc SAML service for the Group "Domain Users", every member may use OIDC apps. An app setting deactivates this.
+
 The apache2 config is at `/etc/apache2/conf-available/openid-connect-provider.conf`, linked to appropriate conf-dirs depending on the server role.
 
 # Tests
