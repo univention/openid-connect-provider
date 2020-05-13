@@ -4,7 +4,7 @@
 Latest documentation. See here how to setup the app correctly. Blog entries may contain outdated information and should only be used as a reference to figure out how to setup relying party service against this app
 
 [Blog article about app release - Info about Wordpress setup](https://www.univention.de/blog-de/2018/12/openid-connect-provider/)
-[Internal article about Setting up Nextcloud](ihttps://nissedal.knut.univention.de/~edamrose/oidc_nextcloud_anbindung.html)
+[Internal article about Setting up Nextcloud](https://nissedal.knut.univention.de/~edamrose/oidc_nextcloud_anbindung.html)
 
 [OpenID Connect Provider app in the UCS App catalogue](https://www.univention.de/produkte/univention-app-center/app-katalog/openid-connect-provider/)
 
@@ -18,7 +18,7 @@ The docker image used in the app is [kopano_konnect](https://github.com/zokradon
 
 # SAML Support
 
-With App version 2.0++ SAML is used as the authentication backend. Users are authenticated via SAML, but to query the user information to fill in the oidc claims konnect uses its LDAP backend.
+With App version 2.0++ SAML is used as the authentication backend. Users are authenticated via SAML, but to query the user information to fill in the oidc claims, konnect uses its LDAP backend.
 
 When an OIDC relying party is setup against the OIDC App, the user flow should be:
 ```
@@ -32,16 +32,37 @@ get userinfo ->
 				fetch ---------------------->  ldapsearch
 ```
 
+# Configuration
+
+The app is configured with app settings.
+Listener and configure scripts write to `/etc/kopano/konnectd-identifier-registration.yaml` and `/etc/kopano/konnectd.cfg`
+New service can be registered with the udm module oidc/rpservice.
+Only services below `cn=oidc,cn=univention,$ldap_base` are recognized.
+To integrate other services, they often require URIs for the identity provider endpoints, they are available at `https://ucs-sso.$domainname/.well-known/openid-configuration`
+By default the App registers the oidc SAML service for the Group "Domain Users", every member may use OIDC apps. An app setting deactivates this.
+The apache2 config is at `/etc/apache2/conf-available/openid-connect-provider.conf`, linked to appropriate conf-dirs depending on the server role.
+
 # Tests
+
+All tests with browsers should happen in a new private browser window. This ensures that no cookies or old sessions are present.
 
 An app specific test exists in [app/test](app/test)
 
-TODO: describe manual tests
-- setup relying party, test login with ucs user
-- test logout with ucs user, logged into several SAML apps
-- test redirect to signout-url when logging out of OIDC App
+Manual product tests
+- Setup relying party, test login with ucs user
+Install openid-connect-provider app. For an OIDC test app I use the owncloud app from the appcenter, version 10.4.1+ has an app setting to activate Login via OIDC. Ownclouds OIDC settings can be configured in the owncloud app settings.
+UCS Users require a mailPrimaryAddress for this to work. Create a UCS user, login to the portal, use owncloud oidc login. No additional password should be required. In a new browser session, start with login to OIDC service. A login should be required at the SAML IdP.
+
+- Test SAML logout with ucs user, logged into several SAML + OIDC apps
+Log into UCS Portal, create session in other service, e.g. log into UMC. Log into OIDC service. Logout at portal. All SAML and OIDC sessions should be invalidated
+
+- Test redirect to signout-url when logging out of OIDC App
+Log into OIDC App. Click logout button in OIDC App. All SAML and OIDC Sessions should be invalidated. The browser should be redirected to the logout URL configured in the OIDC App setting logout URL.
+
 - Test OIDC App on DC Master and backup (gets installed on ucs-sso.$domain vhost) and other roles (gets installed on $hostname.$domain vhost)
-- ...
+On installation, the app should configure the iss to ucs-sso.$domain on DC Master+Backup, and $hostname.$domain on other roles, check in app settings, and by checking openid-configuration at `.../.well-known/openid-configuration`
+When changing the ISS parameter in app settings, the SAML sp (`ldapsearch SAMLServiceProviderIdentifier=openid-connect-provider`) should be updated to reflect the new URL. On slave and memberserver, the oidc app joinscript should be marked as pending, and after re-running it, the SAML sp object should be updated. There is no automatic apache reconfiguration, make sure a new vhost is configured in apache2.
+OIDC logins should be possible, service may have to be reconfigured for the new URIs.
 
 # Internals
 
