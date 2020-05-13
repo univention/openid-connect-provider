@@ -34,7 +34,7 @@ if ! ([ "$1" == "remove" ] || [ "$1" == "install" ]); then
 fi
 
 # Do not restart container when about to remove app
-[[ "$1" -eq "remove" ]] && exit 0
+[ "$1" == "remove" ] && exit 0
 
 # restart, because changes by configure script inside container require container restart
 echo "sleep 5; univention-app restart openid-connect-provider" | at now
