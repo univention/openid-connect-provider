@@ -52,6 +52,8 @@ The apache2 config is at `/etc/apache2/conf-available/openid-connect-provider.co
 
 All tests with browsers should happen in a new private browser window. This ensures that no cookies or old sessions are present.
 
+All tests have to happen using actual hostnames with correct and verfifyable certificates. The involved services rely on and test for signed and trusted certificates.
+
 An app specific test exists in [app/test](app/test)
 
 Manual product tests

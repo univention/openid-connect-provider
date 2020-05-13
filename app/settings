@@ -24,7 +24,7 @@ Show = Settings
 
 [oidc/konnectd/signing_method]
 Description = JWT default signing method. Default "PS256". Valid values: PKCS#1 based variants (RS256,RS384,RS512) or ECDSA (ES256,ES384,ES512)
-Description[de] = JWT default signing method. Default "PS256". Valid values: PKCS#1 based variants (RS256,RS384,RS512) or ECDSA (ES256,ES384,ES512)
+Description[de] = JWT Standard Signaturmethode. Standardwert "PS256". Gültige Werte: PKCS#1 (RS256,RS384,RS512) oder ECDSA (ES256,ES384,ES512)
 Type = String
 Required = true
 InitialValue = PS256
@@ -32,7 +32,7 @@ Show = Settings
 
 [oidc/konnectd/signed_out_uri]
 Description = Send browser to this URL after the user logged out of the OIDC provider
-Description[de] = Den Browser des Bentzers an die angegebene URL weiterleiten, nachdem er sich am OIDC Provider abgemeldet hat
+Description[de] = Den Browser des Benutzers an die angegebene URL weiterleiten, nachdem er sich am OIDC Provider abgemeldet hat
 Type = String
 Required = true
 InitialValue = https://@%@hostname@%@.@%@domainname@%@
