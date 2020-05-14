@@ -22,14 +22,14 @@ With App version 2.0++ SAML is used as the authentication backend. Users are aut
 
 When an OIDC relying party is setup against the OIDC App, the user flow should be:
 ```
-RP				OIDC App 			SAML		LDAP
+RP              OIDC App            SAML       LDAP
 login page ->
-				no session? ->
-									login
-				authenticated 	<-
+                no session?     ->
+                                    login
+                authenticated   <-
 login at RP
 get userinfo ->
-				fetch ---------------------->  ldapsearch
+                fetch ---------------------->  ldapsearch
 ```
 
 # Configuration
