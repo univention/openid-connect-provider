@@ -1,7 +1,7 @@
 An OpenID Connect provider for UCS. Based on <a href="https://github.com/Kopano-dev/konnect">Kopano Konnect</a>.
 <br>
 <br>
-Configuration options for services can be retrieved via HTTPS protocol on the hostname that is configured in the app settings under the path /.well-known/openid-configuration. The default value after installing the app on a DC master and backup is https://ucs-sso.<pre><UCS-domainname></pre>/.well-known/openid-configuration. On other server roles, the meta information is available directly via the hostname.
+Configuration options for services can be retrieved via HTTPS protocol on the hostname that is configured in the app settings under the path /.well-known/openid-configuration. The default value after installing the app on a DC master and backup is https://ucs-sso.<pre>&lt;UCS-domainname&gt;</pre>/.well-known/openid-configuration. On other server roles, the meta information is available directly via the hostname.
 <br>
 <br>
 New services can be added in UMC LDAP browser module: In the container 'univention' and 'oidc', a new 'OpenID Connect relying party service' object can be added. Additionally, the udm command can be used:
