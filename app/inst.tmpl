@@ -135,7 +135,7 @@ fi
 # everyone in that group can then access services via the openid connect provider
 if ! is_ucr_true oidc/saml/do_not_add_oidc_to_domain_users_group; then
 	udm groups/group modify "$@" \
-		--dn "cn=$(custom_groupname 'Domain Users'),cn=groups,dc=mydomain,dc=intranet" \
+		--dn "cn=$(custom_groupname 'Domain Users'),cn=groups,$ldap_base" \
 		--append "serviceprovidergroup=SAMLServiceProviderIdentifier=openid-connect-provider,cn=saml-serviceprovider,cn=univention,$ldap_base"
 fi
 
