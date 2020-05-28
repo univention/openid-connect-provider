@@ -1,20 +1,18 @@
 Ein OpenID Connect Provider, basierend auf <a href="https://github.com/Kopano-dev/konnect">Kopano Konnect</a>.
 <br>
 <br>
-Die Konfigurationsoptionen für anzubindende Dienste können per HTTPS Protokoll auf dem in den App Settings konfigurierten Hostnamen unter dem Pfad /.well-known/openid-configuration abgerufen werden. Der Standardwert nach der App Installation auf DC Master und Backup Systemen ist https://ucs-sso.<pre>&lt;UCS-Domänenname&gt;</pre>/.well-known/openid-configuration. Auf anderen Serverrollen sind die Metainformationen im selben Pfad über den Hostnamen erreichbar.
+Die Konfigurationsoptionen für anzubindende Dienste können per HTTPS Protokoll auf dem in den App Settings konfigurierten Hostnamen unter dem Pfad /.well-known/openid-configuration abgerufen werden. Der Standardwert nach der App Installation auf DC Master und Backup Systemen ist https://ucs-sso.&lt;UCS-Domaenenname&gt;/.well-known/openid-configuration. Auf anderen Serverrollen sind die Metainformationen im selben Pfad über den Hostnamen erreichbar.
 <br>
 <br>
 Neue Dienste können im UMC LDAP-Browsermodul hinzugefügt werden: Im Container 'oidc' unterhalb des Containers 'univention' kann ein neues Objekt vom Typ 'OpenID Connect relying party service' hinzugefügt werden. Zusätzlich kann per udm ein Eintrag erzeugt werden:
 <pre>
- 
 udm oidc/rpservice create --set name=&lt;internal_name&gt;<internal_name\> \
     --position cn=oidc,cn=univention,$(ucr get ldap/base) \
-    --set clientid=&lt;client_identifier&gt;<client_identifier\> \
-    --set clientsecret=&lt;averylongpassword&gt;<averylongpassword\> \
+    --set clientid=&lt;client_identifier&gt; \
+    --set clientsecret=&lt;averylongpassword&gt; \
     --set trusted=yes \
     --set applicationtype=web \
-    --set redirectURI=&lt;URL_from_client_documentation&gt;<url_from_service_documentation\>
-</url_from_service_documentation\></averylongpassword\></client_identifier\></internal_name\>
+    --set redirectURI=&lt;URL_from_client_documentation&gt;
 </pre>
 Logdateien für den Dienst können in den Logeinträgen des Appcontainers eingesehen werden:
 <pre>
