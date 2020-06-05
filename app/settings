@@ -19,7 +19,7 @@ Description = URL where the openid-connect-provider will retrieve the SAML2 IdP 
 Description[de] = URL unter der der openid-connect-provider die SAML2 IdP Metadaten finden kann.
 Type = String
 Required = true
-InitialValue = https://ucs-sso.@%@domainname@%@/simplesamlphp/saml2/idp/metadata.php
+InitialValue = https://@%@ucs/server/sso/fqdn@%@/simplesamlphp/saml2/idp/metadata.php
 Show = Settings
 
 [oidc/konnectd/signing_method]
