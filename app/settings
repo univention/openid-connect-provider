@@ -31,11 +31,11 @@ InitialValue = PS256
 Show = Settings
 
 [oidc/konnectd/signed_out_uri]
-Description = Send browser to this URL after the user logged out of the OIDC provider
-Description[de] = Den Browser des Benutzers an die angegebene URL weiterleiten, nachdem er sich am OIDC Provider abgemeldet hat
+Description = Some OIDC Apps do not send a redirect URL when a user logs out. If that is the case, send the browser to this URL after the user logged out of the OIDC provider. The URL requires a path component after the FQDN, e.g. it should end with a resource name or '/'
+Description[de] = Einige OIDC Apps senden keine URL für einen redicret, wenn sich ein Benutzer ausloggt. Wenn das der Fall ist, den Browser des Benutzers an die hier angegebene URL weiterleiten, nachdem er sich am OIDC Provider abgemeldet hat. Die URL muss eine Pfadkomponente nach dem FQDN enthalten, also mit einem '/' enden
 Type = String
 Required = true
-InitialValue = https://@%@hostname@%@.@%@domainname@%@
+InitialValue = https://@%@hostname@%@.@%@domainname@%@/
 Show = Settings
 
 [oidc/saml/do_not_add_oidc_to_domain_users_group]
