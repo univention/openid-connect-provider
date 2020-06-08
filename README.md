@@ -62,10 +62,10 @@ Install openid-connect-provider app. For an OIDC test app I use the owncloud app
 UCS Users require a mailPrimaryAddress for this to work. Create a UCS user, login to the portal, use owncloud oidc login. No additional password should be required. In a new browser session, start with login to OIDC service. A login should be required at the SAML IdP.
 
 - Test SAML logout with ucs user, logged into several SAML + OIDC apps
-Log into UCS Portal, create session in other service, e.g. log into UMC. Log into OIDC service. Logout at portal. All SAML and OIDC sessions should be invalidated
+Log into UCS Portal, create session in other service, e.g. log into UMC. Log into OIDC service. Logout at portal. All SAML sessions and the OIDC session at konnect should be invalidated. That means, login is required for accessing further SAML and OIDC Apps. As OIDC has no concept of federated logout, existing sessions in other OIDC Apps are not terminated.
 
 - Test redirect to signout-url when logging out of OIDC App
-Log into OIDC App. Click logout button in OIDC App. All SAML and OIDC Sessions should be invalidated. The browser should be redirected to the logout URL configured in the OIDC App setting logout URL.
+Log into OIDC App. Click logout button in OIDC App. All SAML and OIDC Sessions should be invalidated. The browser should be redirected to the logout URL configured in the OIDC App setting logout URL, when the app provides no redirect_uri to konnect. That is the case for e.g. owncloud. When logging out of Kopano Meet, the redirect will be to Kopano Meet itself.
 
 - Test OIDC App on DC Master and backup (gets installed on ucs-sso.$domain vhost) and other roles (gets installed on $hostname.$domain vhost)
 On installation, the app should configure the iss to ucs-sso.$domain on DC Master+Backup, and $hostname.$domain on other roles, check in app settings, and by checking openid-configuration at `.../.well-known/openid-configuration`
