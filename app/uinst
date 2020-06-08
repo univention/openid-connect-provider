@@ -25,6 +25,8 @@ udm saml/serviceprovider remove --dn "SAMLServiceProviderIdentifier=openid-conne
 
 # remove listener module
 rm -f /usr/lib/univention-directory-listener/system/openid-connect-provider-listener.py
+# set resync state, so a reinstallation will trigger all actions for the module
+univention-directory-listener-ctrl resync openid-connect-provider
 service univention-directory-listener restart
 
 rm -r /usr/share/univention-openid-connect-provider/
