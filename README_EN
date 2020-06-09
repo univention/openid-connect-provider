@@ -16,6 +16,8 @@ udm oidc/rpservice create --set name=&lt;internal_name&gt;<internal_name\> \
     --set redirectURI=&lt;URL_from_client_documentation&gt;<url_from_service_documentation\>
 </url_from_service_documentation\></averylongpassword\></client_identifier\></internal_name\>
 </pre>
+Further documentation for the app is available in the <a href="https://docs.software-univention.de/manual-4.4.html#domain:oidc">UCS manual</a>
+<br>
 Logs for the provider can be found in the app container's docker logs:
 <pre>
 univention-app logs openid-connect-provider
