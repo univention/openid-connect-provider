@@ -16,8 +16,8 @@ if ! ([ "$1" == "remove" ] || [ "$1" == "install" ]); then
 		# oidc is installed, but saml config contains wrong URI
 		serverrole="$(ucr get server/role)"
 		case $serverrole in
-			domaincontroller_master|domaincontroller_backup)
-				# can be run on dc master+backup
+			domaincontroller_master)
+				# can only be run on dc master
 				# but only if no joinscript is currently running
 				if ! pgrep -cf "/bin/bash /usr/sbin/univention-run-join-scripts --force --run-scripts 50openid-connect-provider.inst"; then
 					univention-run-join-scripts --force --run-scripts 50openid-connect-provider.inst
