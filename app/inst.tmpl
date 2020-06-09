@@ -91,6 +91,19 @@ if [ $JS_LAST_EXECUTED_VERSION -lt 4 -a $JS_LAST_EXECUTED_VERSION -gt 0 ]; then
 	univention-directory-listener-ctrl resync openid-connect-provider
 fi
 
+# Set issuer identifier if not already configured
+if ! univention-app shell openid-connect-provider grep "oidc/konnectd/issuer_identifier: " /etc/univention/base.conf > /dev/null; then
+	if [ "$server_role" == "domaincontroller_master" -o "$server_role" == "domaincontroller_backup" ]; then
+		# use sso vhost on DC Master and Backup
+		univention-app configure openid-connect-provider --set oidc/konnectd/issuer_identifier="https://$(ucr get ucs/server/sso/fqdn)"
+	else
+		# use local hostname on other roles
+		univention-app configure openid-connect-provider --set oidc/konnectd/issuer_identifier="https://$hostname.$domainname"
+	fi
+fi
+
+oidc_konnectd_issuer_identifier="$(ucr get oidc/konnectd/issuer_identifier)"
+
 # SAML Service provider object, required for SAML SSO Login into OIDC Provider
 if ! udm saml/serviceprovider list --filter SAMLServiceProviderIdentifier=openid-connect-provider | grep -q "DN:"; then
 	# if serviceprovider object does not exist (new installation), create it
@@ -119,17 +132,6 @@ fi
 echo -n "$(ucr get appcenter/apps/openid-connect-provider/hostdn)" > /etc/kopano/konnectd.ldap_binddn
 docker cp "$(ucr get appcenter/apps/openid-connect-provider/container)":/etc/machine.secret /etc/kopano/konnectd.machine.secret
 chown "$KOPANOUID":"$KOPANOGID" /etc/kopano/konnectd.ldap_binddn /etc/kopano/konnectd.machine.secret
-
-# Set issuer identifier if not already configured
-if ! univention-app shell openid-connect-provider grep "oidc/konnectd/issuer_identifier: " /etc/univention/base.conf > /dev/null; then
-	if [ "$server_role" == "domaincontroller_master" -o "$server_role" == "domaincontroller_backup" ]; then
-		# use sso vhost on DC Master and Backup
-		univention-app configure openid-connect-provider --set oidc/konnectd/issuer_identifier="https://$(ucr get ucs/server/sso/fqdn)"
-	else
-		# use local hostname on other roles
-		univention-app configure openid-connect-provider --set oidc/konnectd/issuer_identifier="https://$hostname.$domainname"
-	fi
-fi
 
 # Add OIDC SAML sp config to domain users group, if not deactivated by app settings
 # everyone in that group can then access services via the openid connect provider
