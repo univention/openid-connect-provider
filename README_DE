@@ -5,6 +5,9 @@ Die Konfigurationsoptionen für anzubindende Dienste können per HTTPS Protokoll
 <br>
 Wenn die App auf DC Master oder Backup installiert ist, sollte sichergestellt sein, dass sie ebenfalls auf allen anderen Servern installiert ist, die unter dem <i>ucs-sso</i> DNS CNAME erreichbar sind.
 <br>
+Die Synchronisation von Sessioninformationen zwischen mehreren Instanzen des OIDC Providers ist nicht vorkonfiguriert.
+Wenn Loginprobleme bei Apps in dieser Konfiguration auftreten, empfehlen wir den OIDC Provider nur auf einem System zu betreiben, und den <i>ucs-sso</i> DNS CNAME auf dieses System zu beschränken, oder den Univention Support zu kontaktieren.
+<br>
 Neue Dienste können im UMC LDAP-Browsermodul hinzugefügt werden: Im Container 'oidc' unterhalb des Containers 'univention' kann ein neues Objekt vom Typ 'OpenID Connect relying party service' hinzugefügt werden. Zusätzlich kann per udm ein Eintrag erzeugt werden:
 <pre>
 udm oidc/rpservice create --set name=&lt;internal_name&gt;<internal_name\> \
