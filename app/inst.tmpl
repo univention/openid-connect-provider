@@ -103,6 +103,8 @@ if ! univention-app shell openid-connect-provider grep "oidc/konnectd/issuer_ide
 fi
 
 oidc_konnectd_issuer_identifier="$(ucr get oidc/konnectd/issuer_identifier)"
+# Remove trailing slash if it exists
+oidc_konnectd_issuer_identifier="${oidc_konnectd_issuer_identifier%/}"
 
 # SAML Service provider object, required for SAML SSO Login into OIDC Provider
 if ! udm saml/serviceprovider list --filter SAMLServiceProviderIdentifier=openid-connect-provider | grep -q "DN:"; then
