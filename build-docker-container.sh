@@ -17,3 +17,6 @@ EOF
 
 docker tag $UCS_IMG:$UCS_IMG_VERSION docker-test-upload.software-univention.de/$UCS_IMG:$UCS_IMG_VERSION
 docker push docker-test-upload.software-univention.de/$UCS_IMG:$UCS_IMG_VERSION
+
+docker tag $UCS_IMG:$UCS_IMG_VERSION docker-upload.software-univention.de/$UCS_IMG:$UCS_IMG_VERSION
+docker push docker-upload.software-univention.de/$UCS_IMG:$UCS_IMG_VERSION
