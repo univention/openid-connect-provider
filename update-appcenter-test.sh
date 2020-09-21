@@ -5,7 +5,7 @@ set -x
 
 # Put app provider portal username into $HOME/.univention-appcenter-user and the password into $HOME/.univention-appcenter-pwd
 
-APP_VERSION="4.3/openid-connect-provider"
+APP_VERSION="4.4/openid-connect-provider"
 
 selfservice () {
 	local uri="https://provider-portal.software-univention.de/appcenter-selfservice/univention-appcenter-control"
