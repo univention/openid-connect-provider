@@ -12,14 +12,9 @@ if ucr get appcenter/apps/openid-connect-provider/docker/params | grep -q read-o
 	ucr set appcenter/apps/openid-connect-provider/docker/params="${appcenter_apps_openid_connect_provider_docker_params/--read-only/}"
 fi
 
-# get numerical user and group id of the kopano user
-if id kopano >/dev/null 2>&1; then
-	KOPANOUID=$(id -u kopano)
-	KOPANOGID=$(id -g kopano)
-else
-	KOPANOUID=$(id -u nobody)
-	KOPANOGID=$(id -g nobody)
-fi
+# kopano konnect should run as user nobody
+KOPANOUID=$(id -u nobody)
+KOPANOGID=$(id -g nobody)
 
 mkdir -p /etc/kopano/
 # make sure a valid directory for temporary files for openssl is provided
@@ -66,7 +61,7 @@ EOF
 fi
 
 echo "setting process of container to the id of the kopano or nobody user"
-ucr set appcenter/apps/openid-connect-provider/docker/params?"--user=$KOPANOUID:$KOPANOGID"
+ucr set appcenter/apps/openid-connect-provider/docker/params="--user=$KOPANOUID:$KOPANOGID"
 
 if [ ! -f /etc/kopano/konnectd.cfg ]; then
 	echo "creating konnectd.cfg"

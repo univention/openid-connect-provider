@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=4
+VERSION=5
 SERVICE="Kopano-Konnect"
 
 . /usr/share/univention-join/joinscripthelper.lib
@@ -12,14 +12,9 @@ SERVICE="Kopano-Konnect"
 joinscript_init
 eval "$(ucr shell)"
 
-# get numerical user and group id of the kopano user
-if id kopano >/dev/null 2>&1; then
-	KOPANOUID=$(id -u kopano)
-	KOPANOGID=$(id -g kopano)
-else
-	KOPANOUID=$(id -u nobody)
-	KOPANOGID=$(id -g nobody)
-fi
+# kopano konnect should run as user nobody
+KOPANOUID=$(id -u nobody)
+KOPANOGID=$(id -g nobody)
 
 a2enmod rewrite proxy proxy_http || die
 
