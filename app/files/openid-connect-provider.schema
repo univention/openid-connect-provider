@@ -33,12 +33,19 @@ attributetype ( 1.3.6.1.4.1.10176.4130.1.6
 	SUBSTR caseIgnoreSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
+attributetype ( 1.3.6.1.4.1.10176.4130.1.7
+	NAME 'insecure'
+	DESC 'OIDC-Provider: mark service as insecure'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
 objectclass	( 1.3.6.1.4.1.10176.4130.1.1
 	NAME 'univentionOIDCService'
 	DESC 'OIDC-Provider: Name of relying party service'
 	SUP top STRUCTURAL
 	MUST ( cn )
 	MAY (
-		clientid $ clientsecret $ applicationType $ redirectURI $ trusted
+		clientid $ clientsecret $ applicationType $ redirectURI $ trusted $ insecure
 		)
 	)

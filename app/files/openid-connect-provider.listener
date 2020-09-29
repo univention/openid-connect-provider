@@ -42,6 +42,28 @@ filter = '(objectClass=univentionOIDCService)'
 target_file = '/etc/kopano/konnectd-identifier-registration.yaml'
 attributes = []
 
+def write_config(filecontent):
+	with open(target_file, 'w') as config:
+		config.write("# WARNING: this file is maintained by univention-directory-listener\n")
+		config.write("# Additional services can be added with the UDM module oidc/rpservice\n")
+		config.write("# Konnect needs to be restarted for changes to take effect.\n\n")
+		yaml.dump(filecontent, config, default_flow_style=False)
+
+
+def initialize():
+	listener.setuid(0)
+	try:
+		with open(target_file, 'r') as config:
+			filecontent = yaml.safe_load(config)
+		if 'clients' in filecontent:
+			filecontent['clients'] = []
+		if filecontent:
+			write_config(filecontent)
+	except IOError as e:
+		ud.debug(ud.LISTENER, ud.ERROR, 'IOError accessing config: %s' % e)
+	finally:
+		listener.unsetuid()
+
 
 def handler(dn, new, old):
 	listener.setuid(0)
@@ -62,7 +84,11 @@ def handler(dn, new, old):
 				# udm syntax returns string, so convert new['trusted'][0] to bool.
 				# otherwise, the result in the yaml will be a quoted string
 				client['trusted'] = new['trusted'][0] in ['yes']  
-				client['redirect_uris'] = new['redirectURI']
+				if 'redirectURI' in new:
+					client['redirect_uris'] = new['redirectURI']
+				if 'insecure' in new and new['insecure'][0] in ['yes']:
+					client['insecure'] = True
+
 				if old and 'clients' in filecontent:
 					for c in filecontent['clients']:
 						if c['name'] == old['cn'][0]:
@@ -75,11 +101,7 @@ def handler(dn, new, old):
 				filecontent['clients'].append(client)
 
 		if filecontent:
-			with open(target_file, 'w') as config:
-				config.write("# WARNING: this file is maintained by univention-directory-listener\n")
-				config.write("# Additional services can be added with the UDM module oidc/rpservice\n")
-				config.write("# Konnect needs to be restarted for changes to take effect.\n\n")
-				yaml.dump(filecontent, config, default_flow_style=False)
+			write_config(filecontent)
 
 		subprocess.call(['/usr/bin/univention-app', 'restart', 'openid-connect-provider'])
 	except IOError as e:

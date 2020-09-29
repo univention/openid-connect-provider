@@ -105,7 +105,17 @@ property_descriptions = {
 		syntax=univention.admin.syntax.FiveThirdsString,
 		multivalue=True,
 		options=[],
-		required=True,
+		required=False,
+		may_change=True,
+		identifies=False,
+	),
+	'insecure': univention.admin.property(
+		short_description=_(u'Set insecure flag'),
+		long_description=_(u'Mark the service as insecure in the config. The default is "no", marking the service as secure'),
+		syntax=univention.admin.syntax.booleanNone,
+		multivalue=False,
+		options=[],
+		required=False,
 		may_change=True,
 		identifies=False,
 	),
@@ -120,6 +130,7 @@ layout = [
 			["trusted", ],
 			["applicationtype", ],
 			["redirectURI", ],
+			["insecure", ],
 		]),
 	]),
 ]
@@ -130,6 +141,7 @@ mapping.register('name', 'cn', None, univention.admin.mapping.ListToString)
 mapping.register('clientid', 'clientid', None, univention.admin.mapping.ListToString)
 mapping.register('clientsecret', 'clientsecret', None, univention.admin.mapping.ListToString)
 mapping.register('trusted', 'trusted', None, univention.admin.mapping.ListToString)
+mapping.register('insecure', 'insecure', None, univention.admin.mapping.ListToString)
 mapping.register('applicationtype', 'applicationType', None, univention.admin.mapping.ListToString)
 mapping.register('redirectURI', 'redirectURI')
 
