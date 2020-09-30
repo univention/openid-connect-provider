@@ -1,22 +1,22 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os.path
 import os
 import sys
 import yaml
 
-base_conf = u"/etc/univention/base.conf"
-identifier_registration_file = u"/etc/kopano/konnectd-identifier-registration.yaml"
-konnectd_cfg = u"/etc/kopano/konnectd.cfg"
+base_conf = "/etc/univention/base.conf"
+identifier_registration_file = "/etc/kopano/konnectd-identifier-registration.yaml"
+konnectd_cfg = "/etc/kopano/konnectd.cfg"
 
 cfg_mapping = {
 		"oidc_konnectd_issuer_identifier": "oidc_issuer_identifier",
 		}
 
-print(u"configuration script running...")
+print("configuration script running...")
 
 if not os.path.isfile(base_conf):
-	print(u"base.conf does not exist, exiting")
+	print("base.conf does not exist, exiting")
 	sys.exit(1)
 
 with open(base_conf) as f, open(konnectd_cfg, "w+") as cfgfile:
@@ -28,27 +28,27 @@ with open(base_conf) as f, open(konnectd_cfg, "w+") as cfgfile:
 			continue
 		keyvalue[0] = keyvalue[0].replace("/", "_")
 		# Part 1: write /etc/kopano/konnectd-identifier-registration.yaml
-		if keyvalue[0] == u"oidc_konnectd_saml2_metadata_url":
+		if keyvalue[0] == "oidc_konnectd_saml2_metadata_url":
 			filecontent = []
-			with open(identifier_registration_file, u"r") as irf:
+			with open(identifier_registration_file, "r") as irf:
 				filecontent = yaml.safe_load(irf)
-				for authority in filecontent[u"authorities"]:
-					if authority[u"id"] == u"univention":
-						authority[u"metadata_endpoint"] = keyvalue[1].strip()
+				for authority in filecontent["authorities"]:
+					if authority["id"] == "univention":
+						authority["metadata_endpoint"] = keyvalue[1].strip()
 
-			with open(identifier_registration_file, u"w") as irf:
+			with open(identifier_registration_file, "w") as irf:
 				yaml.dump(filecontent, irf, default_flow_style=False)
 			continue
 
 		# Part 2: write /etc/kopano/konnectd.cfg
-		if keyvalue[0].startswith(u"oidc_konnectd_"):
+		if keyvalue[0].startswith("oidc_konnectd_"):
 			cfgkey = ""
-			if keyvalue[0] in cfg_mapping.keys():
+			if keyvalue[0] in list(cfg_mapping.keys()):
 				# some keys map to a specific value in the cfg
 				cfgkey = cfg_mapping[keyvalue[0]]
 			else:
 				# while most should be fine when just cutting of the leading from the ucr key
-				cfgkey = keyvalue[0].replace(u"oidc_konnectd_", u"", 1)
+				cfgkey = keyvalue[0].replace("oidc_konnectd_", "", 1)
 
 			# some value are binary / checkboxes. entrypoint script expects 'yes' in that case
 			cfgvalue = keyvalue[1].strip()
