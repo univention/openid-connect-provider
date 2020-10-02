@@ -2,10 +2,10 @@
 
 set -xe
 
-DOCKER_IMG_VERSION=0.33.6
+DOCKER_IMG_VERSION=0.33.8
 DOCKER_IMG=kopano/kopano_konnect
 UCS_IMG=openid-connect-provider
-UCS_IMG_VERSION=2.0-konnect-0.33.6
+UCS_IMG_VERSION=2.0-konnect-0.33.8
 
 
 docker build --force-rm --no-cache --pull -t "$UCS_IMG:$UCS_IMG_VERSION" -<<EOF
