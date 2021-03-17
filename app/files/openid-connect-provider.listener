@@ -1,8 +1,9 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Univention Directory Listener
 #
-# Copyright 2018 Univention GmbH
+# Copyright 2018-2021 Univention GmbH
 #
 # http://www.univention.de/
 #
@@ -29,7 +30,7 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
-__package__ = ''  # workaround for PEP 366
+from __future__ import absolute_import
 
 import yaml
 import listener
@@ -41,6 +42,7 @@ description = 'Update oidc provider service configuration'
 filter = '(objectClass=univentionOIDCService)'
 target_file = '/etc/kopano/konnectd-identifier-registration.yaml'
 attributes = []
+
 
 def write_config(filecontent):
 	with open(target_file, 'w') as config:
@@ -59,8 +61,8 @@ def initialize():
 			filecontent['clients'] = []
 		if filecontent:
 			write_config(filecontent)
-	except IOError as e:
-		ud.debug(ud.LISTENER, ud.ERROR, 'IOError accessing config: %s' % e)
+	except IOError as exc:
+		ud.debug(ud.LISTENER, ud.ERROR, 'IOError accessing config: %s' % (exc,))
 	finally:
 		listener.unsetuid()
 
@@ -73,39 +75,39 @@ def handler(dn, new, old):
 			filecontent = yaml.safe_load(config)
 			# Remove old entry. If it was modified, it will be readded below
 			if old:
-				if filecontent['clients']: # is empty when no relying party exists
-					filecontent['clients'] = [client for client in filecontent['clients'] if client['name'] != old['cn'][0]]
+				if filecontent['clients']:  # is empty when no relying party exists
+					filecontent['clients'] = [client for client in filecontent['clients'] if client['name'] != old['cn'][0].decode('UTF-8')]
 			if new:
 				client = {}
-				client['name'] = new['cn'][0]
-				client['id'] = new['clientid'][0]
-				client['secret'] = new['clientsecret'][0]
-				client['application_type'] = new['applicationType'][0]
+				client['name'] = new['cn'][0].decode('UTF-8')
+				client['id'] = new['clientid'][0].decode('UTF-8')
+				client['secret'] = new['clientsecret'][0].decode('UTF-8')
+				client['application_type'] = new['applicationType'][0].decode('UTF-8')
 				# udm syntax returns string, so convert new['trusted'][0] to bool.
 				# otherwise, the result in the yaml will be a quoted string
-				client['trusted'] = new['trusted'][0] in ['yes']  
+				client['trusted'] = new['trusted'][0].decode('UTF-8') in ['yes']
 				if 'redirectURI' in new:
-					client['redirect_uris'] = new['redirectURI']
-				if 'insecure' in new and new['insecure'][0] in ['yes']:
+					client['redirect_uris'] = [x.decode('UTF-8') for x in new['redirectURI']]
+				if 'insecure' in new and new['insecure'][0].decode('UTF-8') in ['yes']:
 					client['insecure'] = True
 
 				if old and 'clients' in filecontent:
 					for c in filecontent['clients']:
-						if c['name'] == old['cn'][0]:
+						if c['name'] == old['cn'][0].decode('UTF-8'):
 							del filecontent['clients'][client]
 				if 'clients' not in filecontent:
 					filecontent['clients'] = []
 				if not isinstance(filecontent['clients'], list):
 					filecontent['clients'] = []
-					
+
 				filecontent['clients'].append(client)
 
 		if filecontent:
 			write_config(filecontent)
 
 		subprocess.call(['/usr/bin/univention-app', 'restart', 'openid-connect-provider'])
-	except IOError as e:
-		ud.debug(ud.LISTENER, ud.ERROR, 'IOError accessing config: %s' % e)
+	except IOError as exc:
+		ud.debug(ud.LISTENER, ud.ERROR, 'IOError accessing config: %s' % (exc,))
 
 	finally:
 		listener.unsetuid()

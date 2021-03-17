@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018 Univention GmbH
+# Copyright 2018-2021 Univention GmbH
 #
 # http://www.univention.de/
 #
@@ -28,7 +28,6 @@
 # <http://www.gnu.org/licenses/>.
 
 from univention.admin.layout import Tab, Group
-import univention.admin.filter
 import univention.admin.handlers
 import univention.admin.syntax
 
@@ -37,14 +36,20 @@ _ = translation.translate
 
 module = 'oidc/rpservice'
 superordinate = 'settings/cn'
-childs = 0
+childs = False
 short_description = _(u'OpenID Connect relying party service')
 long_description = _(u'Management of OpenID provider configuration for services')
 operations = ['add', 'edit', 'remove', 'search', 'move']
 default_containers = ["cn=oidc,cn=univention"]
 help_text = _(u'Management of OpenID provider configurations for services')
 
-options = {}
+options = {
+	'default': univention.admin.option(
+		short_description=short_description,
+		default=True,
+		objectClasses=['top', 'univentionOIDCService'],
+	)
+}
 
 property_descriptions = {
 	'name': univention.admin.property(
@@ -149,26 +154,7 @@ mapping.register('redirectURI', 'redirectURI')
 class object(univention.admin.handlers.simpleLdap):
 	module = module
 
-	def _ldap_addlist(self):
-		al = [('objectClass', ['top', 'univentionOIDCService'])]
-		return al
 
-
-def lookup(co, lo, filter_s, base='', superordinate=None, scope='sub', unique=False, required=False, timeout=-1, sizelimit=0):
-	searchfilter = univention.admin.filter.conjunction('&', [
-		univention.admin.filter.expression('objectClass', 'univentionOIDCService'),
-	])
-
-	if filter_s:
-		filter_p = univention.admin.filter.parse(filter_s)
-		univention.admin.filter.walk(filter_p, univention.admin.mapping.mapRewrite, arg=mapping)
-		searchfilter.expressions.append(filter_p)
-
-	res = []
-	for dn in lo.searchDn(unicode(searchfilter), base, scope, unique, required, timeout, sizelimit):
-		res.append(object(co, lo, None, dn))
-	return res
-
-
-def identify(distinguished_name, attributes, canonical=False):
-	return 'univentionOIDCService' in attributes.get('objectClass', [])
+identify = object.identify
+lookup = object.lookup
+lookup_filter = object.lookup_filter

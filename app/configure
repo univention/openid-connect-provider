@@ -10,8 +10,8 @@ identifier_registration_file = "/etc/kopano/konnectd-identifier-registration.yam
 konnectd_cfg = "/etc/kopano/konnectd.cfg"
 
 cfg_mapping = {
-		"oidc_konnectd_issuer_identifier": "oidc_issuer_identifier",
-		}
+	"oidc_konnectd_issuer_identifier": "oidc_issuer_identifier",
+}
 
 print("configuration script running...")
 

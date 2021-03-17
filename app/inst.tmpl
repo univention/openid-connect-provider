@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=5
+VERSION=6
 SERVICE="Kopano-Konnect"
 
 . /usr/share/univention-join/joinscripthelper.lib
@@ -69,6 +69,7 @@ cat << EOF >"/usr/share/univention-openid-connect-provider/58openid-connect-prov
 EOF
 
 ucs_registerLDAPExtension "$@" \
+	--ucsversionstart "4.4-0" --ucsversionend "5.99-0" \
 	--packagename openid-connect-provider \
 	--packageversion 0.1 \
 	--schema /usr/share/univention-openid-connect-provider/openid-connect-provider.schema \
