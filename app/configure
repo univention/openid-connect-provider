@@ -37,7 +37,7 @@ with open(base_conf) as f, open(konnectd_cfg, "w+") as cfgfile:
 						authority["metadata_endpoint"] = keyvalue[1].strip()
 
 			with open(identifier_registration_file, "w") as irf:
-				yaml.dump(filecontent, irf, default_flow_style=False)
+				yaml.safe_dump(filecontent, irf, default_flow_style=False)
 			continue
 
 		# Part 2: write /etc/kopano/konnectd.cfg

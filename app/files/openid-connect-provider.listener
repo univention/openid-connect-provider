@@ -49,7 +49,7 @@ def write_config(filecontent):
 		config.write("# WARNING: this file is maintained by univention-directory-listener\n")
 		config.write("# Additional services can be added with the UDM module oidc/rpservice\n")
 		config.write("# Konnect needs to be restarted for changes to take effect.\n\n")
-		yaml.dump(filecontent, config, default_flow_style=False)
+		yaml.safe_dump(filecontent, config, default_flow_style=False)
 
 
 def initialize():
