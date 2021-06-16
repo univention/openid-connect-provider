@@ -19,10 +19,11 @@ if not os.path.isfile(base_conf):
 	print("base.conf does not exist, exiting")
 	sys.exit(1)
 
-with open(base_conf) as f, open(konnectd_cfg, "w+") as cfgfile:
+with open(base_conf, 'rb') as f, open(konnectd_cfg, "w+") as cfgfile:
 	cfgfile.write("# WARNING: this file is maintained by univention-directory-listener, manual changes will be overwritten\n")
 
 	for line in f:
+		line = line.decode('UTF-8', 'replace')
 		keyvalue = line.split(": ", 1)
 		if len(keyvalue) < 2:
 			continue
