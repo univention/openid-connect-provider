@@ -30,7 +30,7 @@ with open(base_conf) as f, open(konnectd_cfg, "w+") as cfgfile:
 		# Part 1: write /etc/kopano/konnectd-identifier-registration.yaml
 		if keyvalue[0] == "oidc_konnectd_saml2_metadata_url":
 			filecontent = []
-			with open(identifier_registration_file, "r") as irf:
+			with open(identifier_registration_file, "rb") as irf:
 				filecontent = yaml.safe_load(irf)
 				for authority in filecontent["authorities"]:
 					if authority["id"] == "univention":
@@ -43,7 +43,7 @@ with open(base_conf) as f, open(konnectd_cfg, "w+") as cfgfile:
 		# Part 2: write /etc/kopano/konnectd.cfg
 		if keyvalue[0].startswith("oidc_konnectd_"):
 			cfgkey = ""
-			if keyvalue[0] in list(cfg_mapping.keys()):
+			if keyvalue[0] in cfg_mapping:
 				# some keys map to a specific value in the cfg
 				cfgkey = cfg_mapping[keyvalue[0]]
 			else:

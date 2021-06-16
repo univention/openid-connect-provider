@@ -55,7 +55,7 @@ def write_config(filecontent):
 def initialize():
 	listener.setuid(0)
 	try:
-		with open(target_file, 'r') as config:
+		with open(target_file, 'rb') as config:
 			filecontent = yaml.safe_load(config)
 		if 'clients' in filecontent:
 			filecontent['clients'] = []
@@ -71,7 +71,7 @@ def handler(dn, new, old):
 	listener.setuid(0)
 	try:
 		filecontent = ""
-		with open(target_file, 'r') as config:
+		with open(target_file, 'rb') as config:
 			filecontent = yaml.safe_load(config)
 			# Remove old entry. If it was modified, it will be readded below
 			if old:
